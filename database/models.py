@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Text, ForeignKey
+from sqlalchemy import Column, Text, ForeignKey, DateTime
 from sqlalchemy.dialects.postgresql import VARCHAR, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -43,6 +43,7 @@ class TPostalArea(model_base):
     pa_name = Column(Text)
     pa_code = Column(Text, nullable=False)
     pa_data = Column(JSONB)
+    pa_updated_at = Column(DateTime(timezone=True), nullable=True)
     ci_id = Column(VARCHAR(32), ForeignKey('t_city.ci_id'))
 
     city = relationship("TCity", back_populates="postal_areas")
