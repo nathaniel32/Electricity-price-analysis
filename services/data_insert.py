@@ -1,4 +1,4 @@
-from utils import config
+from services.utils import config
 from database.connection import session_local
 from database.models import TCountry, TProvince, TCity, TPostalArea
 import requests
@@ -27,17 +27,23 @@ class DataImporter:
             .all()
         )
 
+        if areas:
+            print(f"Found {len(areas)} rows to fetch!")
+        else:
+            print("Nothing can be done!")
+
         for area in areas:
             pa_code = area.pa_code
             
             try:
-                response = requests.get(f"{self.target_url}{pa_code}")
+                response = requests.get(f"{self.target_url}{pa_code}", proxies=config.PROXIES)
                 response.raise_for_status()
 
                 area.pa_data = response.json()
                 area.pa_updated_at = datetime.now(pytz.utc)
 
                 print("PLZ:", pa_code, "\nTime: ", area.pa_updated_at, "\nData: ", str(area.pa_data)[0:200]+"...")
+                self.session.commit()
             except requests.RequestException as e:
                 print(f"Failed to fetch data for {pa_code}: {e}")
             except ValueError:
@@ -45,13 +51,5 @@ class DataImporter:
             
             time.sleep(self.fetch_delay)
 
-        self.session.commit()
-
     def close(self):
         self.session.close()
-
-
-if __name__ == "__main__":
-    importer = DataImporter(target_url='https://tibber.com/de/api/lookup/price-overview?postalCode=', target_country='Deutschland', fetch_delay=2)
-    importer.fetch_and_insert()
-    importer.close()

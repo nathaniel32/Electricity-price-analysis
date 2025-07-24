@@ -1,8 +1,9 @@
 import pandas as pd
 import hashlib
-from utils import config
+from services.utils import config
 from database.connection import session_local
 from database.models import TCountry, TProvince, TCity, TPostalArea
+from sqlalchemy import text
 
 class GeoImporter:
     def __init__(
@@ -88,7 +89,9 @@ class GeoImporter:
                 city_key = self.safe_lower(city_name)
                 province_key = self.safe_lower(province_name)
                 postal_key = self.safe_lower(postal_code)
-                pa_id = self.md5_hash(country_key + province_key + city_key + postal_key)
+                
+                #pa_id = self.md5_hash(country_key + province_key + city_key + postal_key) # all postal
+                pa_id = self.md5_hash(country_key + postal_key) # uniq postal pro country
 
                 if pa_id not in postal_seen:
                     postal_seen.add(pa_id)
@@ -115,18 +118,9 @@ class GeoImporter:
         print(f"➤  Cities added        : {city_count}")
         print(f"➤  Postal Areas added  : {postal_count}")
 
+    def drop_all_table(self):
+        self.session.execute(text('DROP SCHEMA public CASCADE; CREATE SCHEMA public'))
+        self.session.commit()
+
     def close(self):
         self.session.close()
-
-
-if __name__ == "__main__":
-    importer = GeoImporter(
-        country_name='Deutschland',
-        csv_path='data/deutschland.csv',
-        province_header='Bundesland',
-        city_header='Ort',
-        additional_header='Zusatz',
-        postal_code_header='Plz'
-    )
-    importer.load_and_insert()
-    importer.close()

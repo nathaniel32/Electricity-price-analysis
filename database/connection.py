@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi import Depends
-from utils import config
+from services.utils import config
 from database.models import model_base
 
 URL_DATABASE = f'postgresql+psycopg2://{config.DB_USERNAME}:{config.DB_PASSWORD}@localhost:5432/{config.DB_DATABASE}'
