@@ -99,7 +99,7 @@ class GeoImporter:
 
         print("100% [Done]")
         print(f"\nImport Summary:")
-        print(f"➤  Country             : {self.country_name}")
+        print(f"➤  Country             : {country_name}")
         print(f"➤  Provinces added     : {province_count}")
         print(f"➤  Cities added        : {city_count}")
         print(f"➤  Postal Areas added  : {postal_count}")
