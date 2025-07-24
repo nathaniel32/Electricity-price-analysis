@@ -4,7 +4,7 @@ from utils import config
 from database.connection import session_local
 from database.models import TCountry, TProvince, TCity, TPostalArea
 
-class GeoDataImporter:
+class GeoImporter:
     def __init__(
         self,
         country_name,
@@ -120,7 +120,7 @@ class GeoDataImporter:
 
 
 if __name__ == "__main__":
-    importer = GeoDataImporter(
+    importer = GeoImporter(
         country_name='Deutschland',
         csv_path='data/deutschland.csv',
         province_header='Bundesland',
