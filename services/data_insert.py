@@ -5,13 +5,16 @@ import requests
 from datetime import datetime
 import pytz
 import time
+import random
 
 class DataImporter:
-    def __init__(self, target_url, target_country, fetch_delay):
+    def __init__(self, target_url, target_country, fetch_min_delay, fetch_max_delay):
         self.target_url = target_url
         self.target_country = target_country
         self.session = session_local()
-        self.fetch_delay = fetch_delay
+        self.fetch_min_delay = fetch_min_delay
+        self.fetch_max_delay = fetch_max_delay
+
 
     def fetch_and_insert(self):
         areas = (
@@ -36,20 +39,20 @@ class DataImporter:
             pa_code = area.pa_code
             
             try:
-                response = requests.get(f"{self.target_url}{pa_code}", proxies=config.PROXIES)
+                response = requests.get(f"{self.target_url}{pa_code}", proxies=config.PROXIES, headers=config.FETCH_HEADER)
                 response.raise_for_status()
 
                 area.pa_data = response.json()
                 area.pa_updated_at = datetime.now(pytz.utc)
 
-                print("PLZ:", pa_code, "\nTime: ", area.pa_updated_at, "\nData: ", str(area.pa_data)[0:200]+"...")
+                print("\nPLZ:", pa_code, "\nTime: ", area.pa_updated_at, "\nData: ", str(area.pa_data)[0:200]+"...")
                 self.session.commit()
             except requests.RequestException as e:
                 print(f"Failed to fetch data for {pa_code}: {e}")
             except ValueError:
                 print(f"The response from the API is not valid JSON for {pa_code}")
             
-            time.sleep(self.fetch_delay)
+            time.sleep(random.uniform(self.fetch_min_delay, self.fetch_max_delay))
 
     def close(self):
         self.session.close()
