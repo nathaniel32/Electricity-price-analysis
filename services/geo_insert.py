@@ -6,21 +6,7 @@ from database.models import TCountry, TProvince, TCity, TPostalArea
 from sqlalchemy import text
 
 class GeoImporter:
-    def __init__(
-        self,
-        country_name,
-        csv_path,
-        province_header,
-        city_header,
-        additional_header,
-        postal_code_header,
-    ):
-        self.country_name = country_name
-        self.csv_path = csv_path
-        self.province_header = province_header
-        self.city_header = city_header
-        self.additional_header = additional_header
-        self.postal_code_header = postal_code_header
+    def __init__(self):
         self.session = session_local()
 
     def md5_hash(self, text):
@@ -31,22 +17,22 @@ class GeoImporter:
             return str(val).strip().lower()
         return ""
 
-    def load_and_insert(self):
-        df = pd.read_csv(self.csv_path, sep=';', dtype={self.postal_code_header: str})
+    def load_and_insert(self, csv_path, country_name, province_header, city_header, additional_header, postal_code_header):
+        df = pd.read_csv(csv_path, sep=';', dtype={postal_code_header: str})
 
         print("0% [Country]")
-        country_key = self.safe_lower(self.country_name)
+        country_key = self.safe_lower(country_name)
         c_id = self.md5_hash(country_key)
         country = self.session.query(TCountry).filter_by(c_id=c_id).first()
         if not country:
-            country = TCountry(c_id=c_id, c_name=self.country_name)
+            country = TCountry(c_id=c_id, c_name=country_name)
             self.session.add(country)
             self.session.commit()
 
         print("25% [Province]")
         province_count = 0
         provinces_seen = set()
-        for province_name in df[self.province_header].dropna().unique():
+        for province_name in df[province_header].dropna().unique():
             province_key = self.safe_lower(province_name)
             p_id = self.md5_hash(country_key + province_key)
             if p_id not in provinces_seen:
@@ -61,8 +47,8 @@ class GeoImporter:
         city_count = 0
         cities_seen = set()
         for _, row in df.iterrows():
-            city_name = row.get(self.city_header)
-            province_name = row.get(self.province_header)
+            city_name = row.get(city_header)
+            province_name = row.get(province_header)
             if pd.notna(city_name) and pd.notna(province_name):
                 city_key = self.safe_lower(city_name)
                 province_key = self.safe_lower(province_name)
@@ -80,10 +66,10 @@ class GeoImporter:
         postal_count = 0
         postal_seen = set()
         for _, row in df.iterrows():
-            city_name = row.get(self.city_header)
-            province_name = row.get(self.province_header)
-            additional = row.get(self.additional_header) if self.additional_header in row else None
-            postal_code = row.get(self.postal_code_header)
+            city_name = row.get(city_header)
+            province_name = row.get(province_header)
+            additional = row.get(additional_header) if additional_header in row else None
+            postal_code = row.get(postal_code_header)
 
             if pd.notna(city_name) and pd.notna(province_name) and pd.notna(postal_code):
                 city_key = self.safe_lower(city_name)
