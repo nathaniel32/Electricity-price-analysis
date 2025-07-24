@@ -17,3 +17,7 @@ Create a `config.json` file in the root of your project with your database crede
 
 * **`geo_insert.py`** — inserts location data from CSV into your database
 * **`data_insert.py`** — fetches electricity price data and updates your database
+
+
+### Database Schema
+![Database Schema](data/schema.png)
