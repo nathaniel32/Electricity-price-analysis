@@ -37,22 +37,30 @@ class DataImporter:
 
         for area in areas:
             pa_code = area.pa_code
-            
-            try:
-                response = requests.get(f"{self.target_url}{pa_code}", proxies=config.PROXIES, headers=config.FETCH_HEADER)
-                response.raise_for_status()
+            if area.pa_status_code != 400:
+                try:
+                    response = requests.get(f"{self.target_url}{pa_code}", proxies=config.PROXIES, headers=config.FETCH_HEADER)
+                    
+                    area.pa_status_code = response.status_code
+                    
+                    response.raise_for_status()
 
-                area.pa_data = response.json()
-                area.pa_updated_at = datetime.now(pytz.utc)
+                    area.pa_data = response.json()
+                    area.pa_updated_at = datetime.now(pytz.utc)
 
-                print("\nPLZ:", pa_code, "\nTime: ", area.pa_updated_at, "\nData: ", str(area.pa_data)[0:200]+"...")
+                    print("\nPLZ:", pa_code, "\nTime: ", area.pa_updated_at, "\nData: ", str(area.pa_data)[0:200]+"...")
+                    self.session.commit()
+                except requests.RequestException as e:
+                    print("\nStatus Code:", area.pa_status_code)
+                    print(f"Failed to fetch data for {pa_code}: {e}")
+                except ValueError:
+                    print("\nStatus Code:", area.pa_status_code)
+                    print(f"The response from the API is not valid JSON for {pa_code}")
+
                 self.session.commit()
-            except requests.RequestException as e:
-                print(f"Failed to fetch data for {pa_code}: {e}")
-            except ValueError:
-                print(f"The response from the API is not valid JSON for {pa_code}")
-            
-            time.sleep(random.uniform(self.fetch_min_delay, self.fetch_max_delay))
+                time.sleep(random.uniform(self.fetch_min_delay, self.fetch_max_delay))
+            else:
+                print(pa_code, "NO DATA!")
 
     def close(self):
         self.session.close()
