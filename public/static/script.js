@@ -10,8 +10,8 @@ new Vue({
         loadingSchema: false,
         executing: false,
         showSchema: true,
-        queryEditorHeight: 100,
-        queryEditorExpanded: false,
+        queryEditorHeight: 0,
+        queryEditorExpanded: true,
         rowsPerPage: 50,
         currentPage: 1,
         showModal: false,
@@ -113,8 +113,9 @@ WHERE pa_code = '01307'
         });
         
         // Handle window resize
-        window.addEventListener('resize', this.handleResize);
-        this.handleResize();
+        //window.addEventListener('resize', this.handleResize);
+        //this.handleResize();
+        this.toggleQueryHeight()
     },
     methods: {
         toggleSchema() {
@@ -122,9 +123,10 @@ WHERE pa_code = '01307'
         },
         toggleQueryHeight() {
             this.queryEditorExpanded = !this.queryEditorExpanded;
-            this.queryEditorHeight = this.queryEditorExpanded ? 200 : 100;
+            this.queryEditorHeight = this.queryEditorExpanded ? 450 : 250;
         },
-        handleResize() {
+        /* handleResize() {
+            console.log(window.innerHeight)
             // Adjust query editor height based on screen size
             const vh = window.innerHeight;
             if (vh < 700) {
@@ -132,7 +134,7 @@ WHERE pa_code = '01307'
             } else {
                 this.queryEditorHeight = this.queryEditorExpanded ? 200 : 100;
             }
-        },
+        }, */
         async loadSchema() {
             this.loadingSchema = true;
             try {
