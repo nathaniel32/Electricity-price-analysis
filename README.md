@@ -9,9 +9,19 @@ Create a `config.json` file in the root of your project with your database crede
 
 ```json
 {
-    "DB_USERNAME": "your_db_username",
-    "DB_PASSWORD": "your_db_password",
-    "DB_DATABASE": "your_database_name"
+    "DB_USERNAME": "",
+    "DB_PASSWORD": "",
+    "DB_DATABASE": "",
+    "PROXIES": {
+        "http": "socks5h://127.0.1.0:9050",
+        "https": "socks5h://127.0.1.0:9050"
+    },
+    "PROXY_SETTING_IP": "127.0.1.0",
+    "PROXY_SETTING_PORT": 9051,
+    "FETCH_HEADER": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+        "Accept": "application/json"
+    }
 }
 ```
 

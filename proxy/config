@@ -2,7 +2,7 @@
 DataDirectory ./proxy/data/node
 GeoIPFile ./proxy/data/geoip
 GeoIPv6File ./proxy/data/geoip6
-MaxCircuitDirtiness 5
+MaxCircuitDirtiness 10
 SocksPort 127.0.1.0:9050
 ControlPort 127.0.1.0:9051
 CookieAuthentication 0

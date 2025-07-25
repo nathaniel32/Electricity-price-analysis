@@ -28,19 +28,19 @@ def main():
         elif choice == '2':
             services.manage_proxy.send_signal_newnym()
         elif choice == '3':
-            data_importer = services.data_insert.DataImporter(target_url='https://tibber.com/de/api/lookup/price-overview?postalCode=', target_country='Deutschland', fetch_min_delay=0.5, fetch_max_delay=2)
+            data_importer = services.data_insert.DataImporter(target_url='https://tibber.com/de/api/lookup/price-overview?postalCode=', target_country='Deutschland', fetch_min_delay=0, fetch_max_delay=0)
             data_importer.fetch_and_insert()
             data_importer.close()
         elif choice == '4':
-            data_importer = services.data_insert.DataImporter(target_url='https://tibber.com/nl/api/lookup/price-overview?postalCode=', target_country='Niederlande', fetch_min_delay=0.5, fetch_max_delay=2)
+            data_importer = services.data_insert.DataImporter(target_url='https://tibber.com/nl/api/lookup/price-overview?postalCode=', target_country='Niederlande', fetch_min_delay=0, fetch_max_delay=0)
             data_importer.fetch_and_insert()
             data_importer.close()
         elif choice == '5':
-            data_importer = services.data_insert.DataImporter(target_url='https://tibber.com/se/api/lookup/price-overview?postalCode=', target_country='Schweden', fetch_min_delay=0.5, fetch_max_delay=2)
+            data_importer = services.data_insert.DataImporter(target_url='https://tibber.com/se/api/lookup/price-overview?postalCode=', target_country='Schweden', fetch_min_delay=0, fetch_max_delay=0)
             data_importer.fetch_and_insert()
             data_importer.close()
         elif choice == '6':
-            data_importer = services.data_insert.DataImporter(target_url='https://tibber.com/no/api/lookup/price-overview?postalCode=', target_country='Norwegen', fetch_min_delay=0.5, fetch_max_delay=2)
+            data_importer = services.data_insert.DataImporter(target_url='https://tibber.com/no/api/lookup/price-overview?postalCode=', target_country='Norwegen', fetch_min_delay=0, fetch_max_delay=0)
             data_importer.fetch_and_insert()
             data_importer.close()
         elif choice == '7':
