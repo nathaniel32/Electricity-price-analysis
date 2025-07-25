@@ -8,7 +8,7 @@ class App:
     def __init__(self):
         self.app = FastAPI()
         self.setup_middleware()
-        self.app.mount("/public", StaticFiles(directory="public"), name="public")
+        self.app.mount("/public", StaticFiles(directory="public", html=True), name="public")
         self.app.include_router(DataAPI().router)
 
     def setup_middleware(self):

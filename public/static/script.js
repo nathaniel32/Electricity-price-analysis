@@ -44,6 +44,14 @@ JOIN t_province ON t_province.p_id = t_city.p_id
 JOIN t_country ON t_country.c_id = t_province.c_id
 WHERE c_name = 'Deutschland' AND pa_data IS NOT NULL
 LIMIT 100;
+` },
+            { label: 'Total Electricity Data/Country', query: `SELECT c_name AS "Country", COUNT(*) AS "Total Data"
+FROM t_postal_area
+JOIN t_city ON t_city.ci_id = t_postal_area.ci_id 
+JOIN t_province ON t_province.p_id = t_city.p_id
+JOIN t_country ON t_country.c_id = t_province.c_id
+WHERE pa_data IS NOT NULL
+GROUP BY c_name;
 ` }
         ]
     },
