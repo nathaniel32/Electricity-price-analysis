@@ -24,4 +24,5 @@ class App:
         return self.app
 
 if __name__ == "__main__":
-    uvicorn.run(App().get_app(), host="localhost", port=9000)
+    print("\nWorkbench: http://localhost:9000/public")
+    uvicorn.run(App().get_app(), host="0.0.0.0", port=9000)
