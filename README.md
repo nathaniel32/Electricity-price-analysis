@@ -9,9 +9,10 @@ Create a `config.json` file in the root of your project with your database crede
 
 ```json
 {
-    "DB_USERNAME": "",
-    "DB_PASSWORD": "",
-    "DB_DATABASE": "",
+    "DB_USERNAME": "nathaniel",
+    "DB_PASSWORD": "niel12",
+    "DB_DATABASE": "strom_db",
+    "USE_PROXY": false,
     "PROXIES": {
         "http": "socks5h://127.0.1.0:9050",
         "https": "socks5h://127.0.1.0:9050"
