@@ -25,6 +25,3 @@ CREATE TABLE t_postal_area (
     ci_id VARCHAR(32),
     FOREIGN KEY (ci_id) REFERENCES t_city(ci_id)
 );
-
--- optional
-CREATE INDEX idx_pa_data ON t_postal_area USING GIN (pa_data);

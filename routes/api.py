@@ -1,0 +1,49 @@
+from fastapi import Depends, Body, APIRouter, HTTPException
+from database.connection import session_local
+from typing import Annotated
+from sqlalchemy.orm import Session
+from fastapi import Depends
+from sqlalchemy import text
+from pydantic import BaseModel
+
+class SQLQuery(BaseModel):
+    query: str
+
+def get_db():
+    db = session_local()
+    try:
+        yield db
+    finally:
+        db.close()
+
+db_dependency = Annotated[Session, Depends(get_db)]
+
+class DataAPI:
+    def __init__(self):
+        self.router = APIRouter(prefix="/api/control", tags=["Control"])
+        self.router.add_api_route("/schema", self.schema, methods=["GET"])
+        self.router.add_api_route("/query", self.query, methods=["POST"])
+
+    async def schema(self):
+        try:
+            with open('database/schema.sql', 'r') as file:
+                sql_script = file.read()
+            return {"data": sql_script}
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Schema file not found")
+
+    def query(self, sql: SQLQuery, db: db_dependency):
+        query_text = sql.query
+        if not query_text:
+            raise HTTPException(status_code=400, detail="Missing 'query' in request body")
+
+        try:
+            result = db.execute(text(query_text))
+            rows = result.fetchall()
+            
+            columns = result.keys()
+            data = [dict(zip(columns, row)) for row in rows]
+
+            return {"data": data}
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
