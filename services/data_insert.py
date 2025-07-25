@@ -15,7 +15,6 @@ class DataImporter:
         self.fetch_min_delay = fetch_min_delay
         self.fetch_max_delay = fetch_max_delay
 
-
     def fetch_and_insert(self):
         areas = (
             self.session.query(TPostalArea)
