@@ -28,7 +28,7 @@ Create a `config.json` file in the root of your project with your database crede
     "COUNTRY_CONFIG": [
         {
             "name": "Deutschland",
-            "url": "https://tibber.com/de/api/lookup/price-overview?postalCode=",
+            "url": "https://example.com/de/api/lookup/price-overview?postalCode=",
             "csv": "data/csv/deutschland.csv",
             "sep": ";",
             "province": "Bundesland",
@@ -38,7 +38,7 @@ Create a `config.json` file in the root of your project with your database crede
         },
         {
             "name": "Niederlande",
-            "url": "https://tibber.com/nl/api/lookup/price-overview?postalCode=",
+            "url": "https://example.com/nl/api/lookup/price-overview?postalCode=",
             "csv": "data/csv/niederlande.csv",
             "sep": ",",
             "province": "state",
@@ -48,7 +48,7 @@ Create a `config.json` file in the root of your project with your database crede
         },
         {
             "name": "Schweden",
-            "url": "https://tibber.com/se/api/lookup/price-overview?postalCode=",
+            "url": "https://example.com/se/api/lookup/price-overview?postalCode=",
             "csv": "data/csv/schweden.csv",
             "sep": ",",
             "province": "state",
@@ -58,7 +58,7 @@ Create a `config.json` file in the root of your project with your database crede
         },
         {
             "name": "Norwegen",
-            "url": "https://tibber.com/no/api/lookup/price-overview?postalCode=",
+            "url": "https://example.com/no/api/lookup/price-overview?postalCode=",
             "csv": "data/csv/norwegen.csv",
             "sep": ",",
             "province": "state",
