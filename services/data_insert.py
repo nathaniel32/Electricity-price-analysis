@@ -14,6 +14,7 @@ class DataImporter:
         self.session = session_local()
         self.fetch_min_delay = fetch_min_delay
         self.fetch_max_delay = fetch_max_delay
+        self.proxies = config.PROXIES if config.USE_PROXY else None
 
     def fetch_and_insert(self):
         areas = (
@@ -38,7 +39,7 @@ class DataImporter:
             pa_code = area.pa_code
             if area.pa_status_code != 400:
                 try:
-                    response = requests.get(f"{self.target_url}{pa_code}", proxies=config.PROXIES, headers=config.FETCH_HEADER)
+                    response = requests.get(f"{self.target_url}{pa_code}", proxies=self.proxies, headers=config.FETCH_HEADER)
                     
                     area.pa_status_code = response.status_code
                     

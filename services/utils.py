@@ -4,7 +4,8 @@ import requests
 
 def check_ip():
     url = 'https://api.ipify.org?format=json'
-    response = requests.get(url, proxies=load_config().PROXIES)
+    proxies = config.PROXIES if config.USE_PROXY else None
+    response = requests.get(url, proxies=proxies)
     print(response.text)
 
 def load_config(path: str = "config.json") -> SimpleNamespace:

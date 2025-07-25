@@ -44,11 +44,15 @@ def main():
         print(f"{7 + len(config.COUNTRY_CONFIG)}. Exit")
 
         choice = input("Input: ").strip()
+        print()
 
         if choice == '1':
             services.utils.check_ip()
         elif choice == '2':
-            services.manage_proxy.send_signal_newnym()
+            if config.USE_PROXY:
+                services.manage_proxy.send_signal_newnym()
+            else:
+                print("Change 'USE_PROXY=true' in config.json to use this service!")
         elif choice in map(str, range(3, 3 + len(config.COUNTRY_CONFIG))):
             index = int(choice) - 3
             fetch_and_save_data(config.COUNTRY_CONFIG[index])

@@ -1,5 +1,6 @@
 import socket
 from services.utils import config
+
 def send_signal_newnym(password=None):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((config.PROXY_SETTING_IP, config.PROXY_SETTING_PORT))
