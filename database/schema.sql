@@ -1,3 +1,4 @@
+
 CREATE TABLE t_country(
     c_id VARCHAR(32) PRIMARY KEY,
     c_name TEXT NOT NULL
