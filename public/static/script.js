@@ -53,22 +53,39 @@ JOIN t_country ON t_country.c_id = t_province.c_id
 WHERE pa_data IS NOT NULL
 GROUP BY c_name;
 ` },
-            { label: 'Electricity Price in Hour', query: `SELECT 
+            { label: 'Electricity Price Components in Hour', query: `SELECT
+  elem AS "Data",
+  pa_data ->> 'currency' AS "Currency",
   elem ->> 'date' AS "Date", 
   elem ->> 'hour' AS "Hour", 
-  
+
   -- Taxes
-  (elem -> 'priceComponents'->0 ->> 'priceExcludingVat')::numeric AS "taxes_ex_vat",
-  (elem -> 'priceComponents'->0 ->> 'priceIncludingVat')::numeric AS "taxes_in_vat",
-  
+  (SELECT (pc ->> 'priceExcludingVat')::numeric 
+   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
+   WHERE pc ->> 'type' = 'taxes' LIMIT 1) AS "taxes_ex_vat",
+
+  (SELECT (pc ->> 'priceIncludingVat')::numeric 
+   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
+   WHERE pc ->> 'type' = 'taxes' LIMIT 1) AS "taxes_in_vat",
+
   -- Power
-  (elem -> 'priceComponents'->1 ->> 'priceExcludingVat')::numeric AS "power_ex_vat",
-  (elem -> 'priceComponents'->1 ->> 'priceIncludingVat')::numeric AS "power_in_vat",
-  
+  (SELECT (pc ->> 'priceExcludingVat')::numeric 
+   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
+   WHERE pc ->> 'type' = 'power' LIMIT 1) AS "power_ex_vat",
+
+  (SELECT (pc ->> 'priceIncludingVat')::numeric 
+   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
+   WHERE pc ->> 'type' = 'power' LIMIT 1) AS "power_in_vat",
+
   -- Grid
-  (elem -> 'priceComponents'->2 ->> 'priceExcludingVat')::numeric AS "grid_ex_vat",
-  (elem -> 'priceComponents'->2 ->> 'priceIncludingVat')::numeric AS "grid_in_vat",
-  
+  (SELECT (pc ->> 'priceExcludingVat')::numeric 
+   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
+   WHERE pc ->> 'type' = 'grid' LIMIT 1) AS "grid_ex_vat",
+
+  (SELECT (pc ->> 'priceIncludingVat')::numeric 
+   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
+   WHERE pc ->> 'type' = 'grid' LIMIT 1) AS "grid_in_vat",
+
   pa_code AS "Zip Code", 
   ci_name AS "City", 
   c_name AS "Country"
@@ -77,11 +94,32 @@ FROM t_postal_area
 JOIN t_city     ON t_city.ci_id = t_postal_area.ci_id 
 JOIN t_province ON t_province.p_id = t_city.p_id
 JOIN t_country  ON t_country.c_id = t_province.c_id,
-
 LATERAL jsonb_array_elements(pa_data -> 'energy' -> 'todayHours') AS elem
 
-WHERE pa_code = '01307'
-` }
+WHERE pa_code = '01307';
+` },
+            { label: 'Electricity Price in Hour', query: `SELECT
+  elem AS "Data",
+  pa_data ->> 'currency' AS "Currency",
+  elem ->> 'date' AS "Date", 
+  elem ->> 'hour' AS "Hour", 
+
+  (elem ->> 'priceExcludingVat')::numeric AS "Price_Exc_Vat",
+  (elem ->> 'priceIncludingVat')::numeric AS "Price_Inc_Vat",
+  ((elem ->> 'priceIncludingVat')::numeric - (elem ->> 'priceExcludingVat')::numeric) AS "VAT",
+
+  pa_code AS "Zip Code", 
+  ci_name AS "City", 
+  c_name AS "Country"
+
+FROM t_postal_area 
+JOIN t_city     ON t_city.ci_id = t_postal_area.ci_id 
+JOIN t_province ON t_province.p_id = t_city.p_id
+JOIN t_country  ON t_country.c_id = t_province.c_id
+CROSS JOIN LATERAL jsonb_array_elements(pa_data -> 'energy' -> 'todayHours') AS elem
+
+WHERE pa_code = '01307';
+` },
         ]
     },
     computed: {
