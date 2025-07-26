@@ -4,7 +4,7 @@ from fastapi import Depends
 from services.utils import config
 from database.models import model_base
 
-URL_DATABASE = f'postgresql+psycopg2://{config.DB_USERNAME}:{config.DB_PASSWORD}@localhost:5432/{config.DB_DATABASE}'
+URL_DATABASE = f'postgresql+psycopg2://{config.DB_USERNAME}:{config.DB_PASSWORD}@{config.DB_ADDRESS}/{config.DB_DATABASE}'
 
 database_engine = create_engine(URL_DATABASE)
 
