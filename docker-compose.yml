@@ -29,8 +29,8 @@ services:
     container_name: strom_app
     ports:
       - "9000:9000"
-    environment:
-      - DATABASE_URL=mssql+pyodbc://${DB_USERNAME}:${DB_PASSWORD}@mssql:${DB_PORT}/${DB_DATABASE}?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes
+    #environment:
+    #  - DATABASE_URL=mssql+pyodbc://${DB_USERNAME}:${DB_PASSWORD}@mssql:${DB_PORT}/${DB_DATABASE}?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes
     depends_on:
       - mssql
     volumes:

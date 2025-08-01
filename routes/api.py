@@ -1,5 +1,5 @@
 from fastapi import Depends, Body, APIRouter, HTTPException
-from database.connection import session_local
+from database.connection import Connection
 from typing import Annotated
 from sqlalchemy.orm import Session
 from fastapi import Depends
@@ -10,7 +10,7 @@ class SQLQuery(BaseModel):
     query: str
 
 def get_db():
-    db = session_local()
+    db = Connection(db_hostname="mssql").get_session()
     try:
         yield db
     finally:

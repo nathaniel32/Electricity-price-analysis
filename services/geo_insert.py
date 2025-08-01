@@ -1,13 +1,13 @@
 import pandas as pd
 import hashlib
 from services.utils import config
-from database.connection import session_local
+from database.connection import Connection
 from database.models import TCountry, TProvince, TCity, TPostalArea
 from sqlalchemy import text
 
 class GeoImporter:
     def __init__(self, csv_path, sep, country_name, province_header, city_header, additional_header, postal_code_header):
-        self.session = session_local()
+        self.session = Connection().get_session()
         self.csv_path = csv_path
         self.sep = sep
         self.country_name = country_name

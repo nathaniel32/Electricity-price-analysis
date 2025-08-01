@@ -2,30 +2,46 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from fastapi import Depends
-from services.utils import config
 from database.models import model_base
 
 load_dotenv()
 
-DB_HOSTNAME: str = os.getenv("DB_HOSTNAME")
-DB_PORT: str = os.getenv("DB_PORT")
-DB_DATABASE: str = os.getenv("DB_DATABASE")
-DB_USERNAME: str = os.getenv("DB_USERNAME")
-DB_PASSWORD: str = os.getenv("DB_PASSWORD")
+class Connection:
+    def __init__(
+        self,
+        db_hostname: str = None,
+        db_port: str = None,
+        db_database: str = None,
+        db_username: str = None,
+        db_password: str = None,
+        database_url: str = None,
+    ):
+        if database_url:
+            self.database_url = database_url
+        else:
+            self.db_hostname = db_hostname or os.getenv("DB_HOSTNAME")
+            self.db_port = db_port or os.getenv("DB_PORT")
+            self.db_database = db_database or os.getenv("DB_DATABASE")
+            self.db_username = db_username or os.getenv("DB_USERNAME")
+            self.db_password = db_password or os.getenv("DB_PASSWORD")
 
-DATABASE_URL = f"mssql+pyodbc://{DB_USERNAME}:{DB_PASSWORD}@mssql:{DB_PORT}/{DB_DATABASE}?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
+            self.database_url = f"mssql+pyodbc://{self.db_username}:{self.db_password}@{self.db_hostname}:{self.db_port}/{self.db_database}?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
+        
+        print(f"Using database URL: {self.database_url}")
 
-print(DATABASE_URL)
+        self.engine = create_engine(
+            self.database_url,
+            echo=True,  # False in production
+            pool_pre_ping=True,
+            pool_recycle=300,
+        )
 
-database_engine = create_engine(
-    DATABASE_URL,
-    echo=True,  # False in production
-    pool_pre_ping=True,
-    pool_recycle=300
-)
+        self.SessionLocal = sessionmaker(
+            autocommit=False, autoflush=False, bind=self.engine
+        )
 
-session_local = sessionmaker(autocommit=False, autoflush=False, bind=database_engine)
+    def create_tables(self):
+        model_base.metadata.create_all(bind=self.engine)
 
-# Create all tables
-model_base.metadata.create_all(bind=database_engine)
+    def get_session(self):
+        return self.SessionLocal()
