@@ -1,13 +1,11 @@
 import pandas as pd
 import hashlib
 from services.utils import config
-from database.connection import Connection
 from database.models import TCountry, TProvince, TCity, TPostalArea
-from sqlalchemy import text
 
 class GeoImporter:
-    def __init__(self, csv_path, sep, country_name, province_header, city_header, additional_header, postal_code_header):
-        self.session = Connection().get_session()
+    def __init__(self, session, csv_path, sep, country_name, province_header, city_header, additional_header, postal_code_header):
+        self.session = session
         self.csv_path = csv_path
         self.sep = sep
         self.country_name = country_name
@@ -111,10 +109,3 @@ class GeoImporter:
         print(f"➤  Provinces added     : {province_count}")
         print(f"➤  Cities added        : {city_count}")
         print(f"➤  Postal Areas added  : {postal_count}")
-
-    def drop_all_table(self):
-        self.session.execute(text('DROP SCHEMA public CASCADE; CREATE SCHEMA public'))
-        self.session.commit()
-
-    def close(self):
-        self.session.close()

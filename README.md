@@ -12,5 +12,9 @@ Create a `config.json` file in the root of your project with your database crede
 
 https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver17
 
+
+1. docker-compose up -d
+2. py data_manager.py
+
 ### Database Schema
 ![Database Schema](data/img/schema.png)

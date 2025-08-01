@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database.models import model_base
+from typing import Generator
+from sqlalchemy.orm import Session
 
 load_dotenv()
 
@@ -40,8 +42,23 @@ class Connection:
             autocommit=False, autoflush=False, bind=self.engine
         )
 
+        self.session: Session = None
+
     def create_tables(self):
         model_base.metadata.create_all(bind=self.engine)
 
     def get_session(self):
-        return self.SessionLocal()
+        self.session = self.SessionLocal()
+        return self.session
+    
+    def close_session(self):
+        if self.session:
+            self.session.close()
+            self.session = None
+
+    def get_db(self) -> Generator[Session, None, None]:
+        db = self.get_session()
+        try:
+            yield db
+        finally:
+            db.close()

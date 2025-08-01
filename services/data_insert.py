@@ -1,5 +1,4 @@
 from services.utils import config
-from database.connection import Connection
 from database.models import TCountry, TProvince, TCity, TPostalArea
 import requests
 from datetime import datetime
@@ -9,10 +8,10 @@ import random
 import json
 
 class DataImporter:
-    def __init__(self, target_url, target_country, fetch_min_delay, fetch_max_delay):
+    def __init__(self, session, target_url, target_country, fetch_min_delay, fetch_max_delay):
         self.target_url = target_url
         self.target_country = target_country
-        self.session = Connection().get_session()
+        self.session = session
         self.fetch_min_delay = fetch_min_delay
         self.fetch_max_delay = fetch_max_delay
         self.proxies = config.PROXIES if config.USE_PROXY else None
@@ -62,6 +61,3 @@ class DataImporter:
                 time.sleep(random.uniform(self.fetch_min_delay, self.fetch_max_delay))
             else:
                 print(pa_code, "NO DATA!")
-
-    def close(self):
-        self.session.close()

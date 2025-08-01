@@ -1,22 +1,16 @@
-from fastapi import Depends, Body, APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException
+from sqlalchemy import text
+from pydantic import BaseModel
 from database.connection import Connection
 from typing import Annotated
 from sqlalchemy.orm import Session
 from fastapi import Depends
-from sqlalchemy import text
-from pydantic import BaseModel
+
+db_connection = Connection(db_hostname="mssql")
+db_connection.create_tables()
 
 class SQLQuery(BaseModel):
     query: str
-
-def get_db():
-    db = Connection(db_hostname="mssql").get_session()
-    try:
-        yield db
-    finally:
-        db.close()
-
-db_dependency = Annotated[Session, Depends(get_db)]
 
 class DataAPI:
     def __init__(self):
@@ -32,7 +26,7 @@ class DataAPI:
         except FileNotFoundError:
             raise HTTPException(status_code=404, detail="Schema file not found")
 
-    def query(self, sql: SQLQuery, db: db_dependency):
+    def query(self, sql: SQLQuery, db: Annotated[Session, Depends(db_connection.get_db)]):
         query_text = sql.query
         if not query_text:
             raise HTTPException(status_code=400, detail="Missing 'query' in request body")

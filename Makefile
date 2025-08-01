@@ -1,4 +1,4 @@
-.PHONY: clean mssql create-db fastapi build
+.PHONY: clean mssql create-db fastapi all
 
 clean:
 	docker system prune -a --volumes -f
@@ -13,4 +13,4 @@ fastapi:
 	docker-compose up -d fastapi
 
 # Run all
-build: mssql create-db fastapi
+all: mssql create-db fastapi
