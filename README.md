@@ -12,7 +12,7 @@ Create a `config.json` file in the root of your project with your database crede
     "DB_USERNAME": "",
     "DB_PASSWORD": "",
     "DB_DATABASE": "",
-    "DB_ADDRESS": "localhost:5432",
+    "DB_HOSTNAME": "localhost:5432",
     "USE_PROXY": false,
     "PROXIES": {
         "http": "socks5h://127.0.1.0:9050",
@@ -72,4 +72,4 @@ Create a `config.json` file in the root of your project with your database crede
 ```
 
 ### Database Schema
-![Database Schema](data/schema.png)
+![Database Schema](data/img/schema.png)

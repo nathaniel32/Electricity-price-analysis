@@ -22,7 +22,7 @@ CREATE TABLE t_postal_area(
     pa_id VARCHAR(32) PRIMARY KEY,
     pa_name TEXT,
     pa_code TEXT NOT NULL,
-    pa_data JSONB,
+    pa_data NVARCHAR(MAX),
     ci_id VARCHAR(32),
     FOREIGN KEY (ci_id) REFERENCES t_city(ci_id)
 );

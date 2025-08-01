@@ -1,0 +1,47 @@
+services:
+  # SQL Server Database
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: strom_db_app
+    user: "0:0"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_PASSWORD}
+      - MSSQL_PID=Express
+    ports:
+      - "${DB_PORT}:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S ${DB_HOSTNAME} -U sa -P ${DB_PASSWORD} -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # FastAPI Application
+  fastapi:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: strom_app
+    ports:
+      - "9000:9000"
+    environment:
+      - DATABASE_URL=mssql+pyodbc://${DB_USERNAME}:${DB_PASSWORD}@mssql:${DB_PORT}/${DB_DATABASE}?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes
+    depends_on:
+      - mssql
+    volumes:
+      - .:/app
+    networks:
+      - app_network
+    restart: unless-stopped
+
+volumes:
+  mssql_data:
+
+networks:
+  app_network:
+    driver: bridge

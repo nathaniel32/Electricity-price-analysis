@@ -1,4 +1,4 @@
-import uvicorn
+#import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.api import DataAPI
@@ -23,6 +23,8 @@ class App:
     def get_app(self):
         return self.app
 
+app = App().get_app()
+
 if __name__ == "__main__":
     print("\nWorkbench: http://localhost:9000/public")
-    uvicorn.run(App().get_app(), host="0.0.0.0", port=9000)
+    #uvicorn.run(App().get_app(), host="0.0.0.0", port=9000)
