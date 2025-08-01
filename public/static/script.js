@@ -19,33 +19,35 @@ new Vue({
         rawModalData: null,
         modalColumnName: '',
         queryExamples: [
-            { label: 'Select Sample', query: 'SELECT * FROM your_table LIMIT 10;' },
-            { label: 'Count Rows', query: 'SELECT COUNT(*) FROM your_table;' },
-            { label: 'List Tables', query: "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';" },
-            { label: 'Table Columns', query: "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'your_table';" },
-            { label: 'Database Size', query: "SELECT pg_size_pretty(pg_database_size(current_database()));" },
-            { label: 'Active Connections', query: 'SELECT count(*) FROM pg_stat_activity;' }
-        ],
-        queryShortcut: [
-            { label: 'Country', query: 'SELECT * FROM t_country;' },
-            { label: 'Province', query: 'SELECT * FROM t_province;' },
-            { label: 'City', query: 'SELECT * FROM t_city;' },
-            { label: 'Postal Area', query: 'SELECT * FROM t_postal_area LIMIT 100;' },
-            { label: 'Country, Province, City, Postal', query: `SELECT c_name, p_name, ci_name, pa_name, pa_code, pa_data 
+    { label: 'Select Sample', query: 'SELECT TOP 10 * FROM your_table;' },
+    { label: 'Count Rows', query: 'SELECT COUNT(*) FROM your_table;' },
+    { label: 'List Tables', query: "SELECT table_name FROM information_schema.tables WHERE table_schema = 'dbo';" },
+    { label: 'Table Columns', query: "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'your_table';" },
+    { label: 'Database Size', query: "SELECT CAST(SUM(size) * 8.0 / 1024 / 1024 AS DECIMAL(10,2)) AS 'Database Size (GB)' FROM sys.database_files;" },
+    { label: 'Active Connections', query: 'SELECT COUNT(*) FROM sys.dm_exec_sessions WHERE is_user_process = 1;' }
+],
+queryShortcut: [
+    { label: 'Country', query: 'SELECT * FROM t_country;' },
+    { label: 'Province', query: 'SELECT * FROM t_province;' },
+    { label: 'City', query: 'SELECT * FROM t_city;' },
+    { label: 'Postal Area', query: 'SELECT TOP 100 * FROM t_postal_area;' },
+    { label: 'Country, Province, City, Postal', query: `SELECT TOP 100 c_name, p_name, ci_name, pa_name, pa_code, pa_data 
+FROM t_postal_area 
+JOIN t_city ON t_city.ci_id = t_postal_area.ci_id 
+JOIN t_province ON t_province.p_id = t_city.p_id
+JOIN t_country ON t_country.c_id = t_province.c_id` },
+    { label: 'Electricity data/hour', query: `SELECT TOP 100 
+    JSON_VALUE(pa_data, '$.energy.todayHours') AS "Electricity data/hour", 
+    pa_code AS "Zip Code", 
+    ci_name AS "City", 
+    c_name AS "Country"
 FROM t_postal_area 
 JOIN t_city ON t_city.ci_id = t_postal_area.ci_id 
 JOIN t_province ON t_province.p_id = t_city.p_id
 JOIN t_country ON t_country.c_id = t_province.c_id
-LIMIT 100` },
-            { label: 'Electricity data/hour', query: `SELECT pa_data->'energy'->'todayHours' AS "Electricity data/hour", pa_code "Zip Code", ci_name "City", c_name AS "Country"
-FROM t_postal_area 
-JOIN t_city ON t_city.ci_id = t_postal_area.ci_id 
-JOIN t_province ON t_province.p_id = t_city.p_id
-JOIN t_country ON t_country.c_id = t_province.c_id
-WHERE c_name = 'Deutschland' AND pa_data IS NOT NULL
-LIMIT 100;
+WHERE c_name = 'Deutschland' AND pa_data IS NOT NULL;
 ` },
-            { label: 'Total Electricity Data/Country', query: `SELECT c_name AS "Country", COUNT(*) AS "Total Data"
+    { label: 'Total Electricity Data/Country', query: `SELECT c_name AS "Country", COUNT(*) AS "Total Data"
 FROM t_postal_area
 JOIN t_city ON t_city.ci_id = t_postal_area.ci_id 
 JOIN t_province ON t_province.p_id = t_city.p_id
@@ -53,38 +55,38 @@ JOIN t_country ON t_country.c_id = t_province.c_id
 WHERE pa_data IS NOT NULL
 GROUP BY c_name;
 ` },
-            { label: 'Electricity Price Components in Hour', query: `SELECT
-  elem AS "Data",
-  pa_data ->> 'currency' AS "Currency",
-  elem ->> 'date' AS "Date", 
-  elem ->> 'hour' AS "Hour", 
+    { label: 'Electricity Price Components in Hour', query: `SELECT
+  hourly_data.value AS "Data",
+  JSON_VALUE(pa_data, '$.currency') AS "Currency",
+  JSON_VALUE(hourly_data.value, '$.date') AS "Date", 
+  JSON_VALUE(hourly_data.value, '$.hour') AS "Hour", 
 
   -- Taxes
-  (SELECT (pc ->> 'priceExcludingVat')::numeric 
-   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
-   WHERE pc ->> 'type' = 'taxes' LIMIT 1) AS "taxes_ex_vat",
+  (SELECT TOP 1 CAST(JSON_VALUE(pc.value, '$.priceExcludingVat') AS DECIMAL(10,4))
+   FROM OPENJSON(JSON_QUERY(hourly_data.value, '$.priceComponents')) AS pc
+   WHERE JSON_VALUE(pc.value, '$.type') = 'taxes') AS "taxes_ex_vat",
 
-  (SELECT (pc ->> 'priceIncludingVat')::numeric 
-   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
-   WHERE pc ->> 'type' = 'taxes' LIMIT 1) AS "taxes_in_vat",
+  (SELECT TOP 1 CAST(JSON_VALUE(pc.value, '$.priceIncludingVat') AS DECIMAL(10,4))
+   FROM OPENJSON(JSON_QUERY(hourly_data.value, '$.priceComponents')) AS pc
+   WHERE JSON_VALUE(pc.value, '$.type') = 'taxes') AS "taxes_in_vat",
 
   -- Power
-  (SELECT (pc ->> 'priceExcludingVat')::numeric 
-   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
-   WHERE pc ->> 'type' = 'power' LIMIT 1) AS "power_ex_vat",
+  (SELECT TOP 1 CAST(JSON_VALUE(pc.value, '$.priceExcludingVat') AS DECIMAL(10,4))
+   FROM OPENJSON(JSON_QUERY(hourly_data.value, '$.priceComponents')) AS pc
+   WHERE JSON_VALUE(pc.value, '$.type') = 'power') AS "power_ex_vat",
 
-  (SELECT (pc ->> 'priceIncludingVat')::numeric 
-   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
-   WHERE pc ->> 'type' = 'power' LIMIT 1) AS "power_in_vat",
+  (SELECT TOP 1 CAST(JSON_VALUE(pc.value, '$.priceIncludingVat') AS DECIMAL(10,4))
+   FROM OPENJSON(JSON_QUERY(hourly_data.value, '$.priceComponents')) AS pc
+   WHERE JSON_VALUE(pc.value, '$.type') = 'power') AS "power_in_vat",
 
   -- Grid
-  (SELECT (pc ->> 'priceExcludingVat')::numeric 
-   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
-   WHERE pc ->> 'type' = 'grid' LIMIT 1) AS "grid_ex_vat",
+  (SELECT TOP 1 CAST(JSON_VALUE(pc.value, '$.priceExcludingVat') AS DECIMAL(10,4))
+   FROM OPENJSON(JSON_QUERY(hourly_data.value, '$.priceComponents')) AS pc
+   WHERE JSON_VALUE(pc.value, '$.type') = 'grid') AS "grid_ex_vat",
 
-  (SELECT (pc ->> 'priceIncludingVat')::numeric 
-   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
-   WHERE pc ->> 'type' = 'grid' LIMIT 1) AS "grid_in_vat",
+  (SELECT TOP 1 CAST(JSON_VALUE(pc.value, '$.priceIncludingVat') AS DECIMAL(10,4))
+   FROM OPENJSON(JSON_QUERY(hourly_data.value, '$.priceComponents')) AS pc
+   WHERE JSON_VALUE(pc.value, '$.type') = 'grid') AS "grid_in_vat",
 
   pa_code AS "Zip Code", 
   ci_name AS "City", 
@@ -93,40 +95,40 @@ GROUP BY c_name;
 FROM t_postal_area 
 JOIN t_city     ON t_city.ci_id = t_postal_area.ci_id 
 JOIN t_province ON t_province.p_id = t_city.p_id
-JOIN t_country  ON t_country.c_id = t_province.c_id,
-LATERAL jsonb_array_elements(pa_data -> 'energy' -> 'todayHours') AS elem
+JOIN t_country  ON t_country.c_id = t_province.c_id
+CROSS APPLY OPENJSON(JSON_QUERY(pa_data, '$.energy.todayHours')) AS hourly_data
 
 WHERE pa_code = '01307';
 ` },
-            { label: 'Electricity Price in Hour', query: `SELECT
-  elem ->> 'date' AS "Date", 
-  elem ->> 'hour' AS "Hour", 
-  (elem ->> 'priceIncludingVat')::numeric AS "Gesamtpreis",
+    { label: 'Electricity Price in Hour', query: `SELECT
+  JSON_VALUE(hourly_data.value, '$.date') AS "Date", 
+  JSON_VALUE(hourly_data.value, '$.hour') AS "Hour", 
+  CAST(JSON_VALUE(hourly_data.value, '$.priceIncludingVat') AS DECIMAL(10,4)) AS "Gesamtpreis",
 
-  (SELECT (pc ->> 'priceExcludingVat')::numeric 
-   FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
-   WHERE pc ->> 'type' = 'power' LIMIT 1) AS "Nettostrompreis",
+  (SELECT TOP 1 CAST(JSON_VALUE(pc.value, '$.priceExcludingVat') AS DECIMAL(10,4))
+   FROM OPENJSON(JSON_QUERY(hourly_data.value, '$.priceComponents')) AS pc
+   WHERE JSON_VALUE(pc.value, '$.type') = 'power') AS "Nettostrompreis",
 
-  ((elem ->> 'priceIncludingVat')::numeric - 
-   (SELECT (pc ->> 'priceExcludingVat')::numeric 
-    FROM jsonb_array_elements(elem -> 'priceComponents') AS pc
-    WHERE pc ->> 'type' = 'power' LIMIT 1)) AS "Steuern_und_Abgaben",
+  (CAST(JSON_VALUE(hourly_data.value, '$.priceIncludingVat') AS DECIMAL(10,4)) - 
+   (SELECT TOP 1 CAST(JSON_VALUE(pc.value, '$.priceExcludingVat') AS DECIMAL(10,4))
+    FROM OPENJSON(JSON_QUERY(hourly_data.value, '$.priceComponents')) AS pc
+    WHERE JSON_VALUE(pc.value, '$.type') = 'power')) AS "Steuern_und_Abgaben",
 
   pa_code AS "Zip Code", 
   ci_name AS "City", 
   c_name AS "Country",
-  pa_data ->> 'currency' AS "Currency",
-  elem AS "Data"
+  JSON_VALUE(pa_data, '$.currency') AS "Currency",
+  hourly_data.value AS "Data"
 
 FROM t_postal_area 
 JOIN t_city     ON t_city.ci_id = t_postal_area.ci_id 
 JOIN t_province ON t_province.p_id = t_city.p_id
-JOIN t_country  ON t_country.c_id = t_province.c_id,
-LATERAL jsonb_array_elements(pa_data -> 'energy' -> 'todayHours') AS elem
+JOIN t_country  ON t_country.c_id = t_province.c_id
+CROSS APPLY OPENJSON(JSON_QUERY(pa_data, '$.energy.todayHours')) AS hourly_data
 
 WHERE pa_code = '01307';
 ` },
-        ]
+]
     },
     computed: {
         totalRows() {
@@ -265,7 +267,11 @@ WHERE pa_code = '01307';
             return str.length > 100 ? str.substring(0, 100) + '...' : str;
         },
         showCellData(data, columnName) {
-            this.modalData = data;
+            if (this.isJsonString(data)){
+                this.modalData = JSON.parse(data);
+            }else{
+                this.modalData = data;
+            }
             this.rawModalData = data === null || data === undefined ? 'NULL' : String(data);
             this.modalColumnName = columnName;
             this.showModal = true;
