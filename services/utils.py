@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import requests
 
 def check_ip():
-    url = 'https://api.ipify.org?format=json'
+    url = config.IP_CHECK_URL
     proxies = config.PROXIES if config.USE_PROXY else None
     response = requests.get(url, proxies=proxies)
     print(response.text)
