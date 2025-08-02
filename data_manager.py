@@ -18,14 +18,18 @@ class DataManager:
         self.db_connection.close_session()
 
     def create_tables(self):
-        self.db_connection.create_tables()
-
+        try:
+            self.db_connection.create_tables()
+            print("All tables created successfully.")
+        except Exception as e:
+            print(f"Failed to create tables: {e}")
+    
     def run_sql_file(self):
-        filepath = input("File Path: ").strip()
+        filepath = input("File Path: ").strip().strip('"').strip("'")
         print()
 
         try:
-            with open(filepath, 'r') as file:
+            with open(filepath, 'r', encoding='utf-8') as file:
                 sql_commands = file.read()
         except FileNotFoundError:
             print("File not found!")
@@ -52,7 +56,6 @@ class DataManager:
         EXEC sp_executesql @sql;
         """
 
-        # Drop all tabel
         drop_tables = """
         DECLARE @sql NVARCHAR(MAX) = N'';
 
@@ -63,9 +66,14 @@ class DataManager:
         EXEC sp_executesql @sql;
         """
 
-        self.session.execute(text(drop_fks))
-        self.session.execute(text(drop_tables))
-        self.session.commit()
+        try:
+            self.session.execute(text(drop_fks))
+            self.session.execute(text(drop_tables))
+            self.session.commit()
+            print("All tables dropped successfully.")
+        except Exception as e:
+            self.session.rollback()
+            print(f"Failed to drop tables: {e}")
 
     def fetch_and_save_data(self, country):
         importer = services.data_insert.DataImporter(

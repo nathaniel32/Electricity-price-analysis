@@ -77,7 +77,7 @@ class TPrice(model_base):
     pa_id = Column(String(32), ForeignKey('t_postal_area.pa_id'))
     d_id = Column(String(32), ForeignKey('t_date.d_id'))
     ca_id = Column(String(32), ForeignKey('t_category.ca_id'))
-    p_value = Column(Numeric(19, 4))  # representasi tipe MONEY
+    p_value = Column(Numeric(19, 4))
 
     __table_args__ = (
         PrimaryKeyConstraint('pa_id', 'd_id', 'ca_id', name='pk_t_price'),

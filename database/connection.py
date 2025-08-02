@@ -33,7 +33,7 @@ class Connection:
 
         self.engine = create_engine(
             self.database_url,
-            echo=True,  # False in production
+            echo=False,  # log
             pool_pre_ping=True,
             pool_recycle=300,
         )
