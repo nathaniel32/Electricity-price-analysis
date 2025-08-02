@@ -27,8 +27,7 @@ new Vue({
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_NAME = 'table_name';` },
     { label: 'List Tables', query: "SELECT table_name FROM information_schema.tables WHERE table_schema = 'dbo';" },
-    { label: 'Table Columns', query: "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'table_name';" },
-    { label: 'Database Size', query: "SELECT CAST(SUM(size) * 8.0 / 1024 / 1024 AS DECIMAL(10,2)) AS 'Database Size (GB)' FROM sys.database_files;" },
+    { label: 'Database Size', query: "SELECT CAST(SUM(size) * 8.0 / 1024 AS DECIMAL(10,2)) AS 'Database Size (MB)' FROM sys.database_files;" },
     { label: 'Active Connections', query: 'SELECT COUNT(*) FROM sys.dm_exec_sessions WHERE is_user_process = 1;' }
 ],
 queryShortcut: [
