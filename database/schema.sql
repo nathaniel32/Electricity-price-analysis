@@ -28,12 +28,12 @@ CREATE TABLE t_postal_area (
 
 CREATE TABLE t_date (
     d_id VARCHAR(32) PRIMARY KEY,
-    d_date DATE NOT NULL
+    d_date DATE NOT NULL UNIQUE
 );
 
 CREATE TABLE t_category (
     ca_id VARCHAR(32) PRIMARY KEY,
-    ca_name VARCHAR(255) NOT NULL
+    ca_name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE t_price (

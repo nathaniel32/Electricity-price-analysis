@@ -57,7 +57,7 @@ class TDate(model_base):
     __tablename__ = 't_date'
 
     d_id = Column(String(32), primary_key=True)
-    d_date = Column(Date, nullable=False)
+    d_date = Column(Date, nullable=False, unique=True)
 
     prices = relationship("TPrice", back_populates="date")
 
@@ -66,7 +66,7 @@ class TCategory(model_base):
     __tablename__ = 't_category'
 
     ca_id = Column(String(32), primary_key=True)
-    ca_name = Column(String(255), nullable=False)
+    ca_name = Column(String(255), nullable=False, unique=True)
 
     prices = relationship("TPrice", back_populates="category")
 
