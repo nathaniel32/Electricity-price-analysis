@@ -41,7 +41,7 @@ JOIN t_city ON t_city.ci_id = t_postal_area.ci_id
 JOIN t_province ON t_province.p_id = t_city.p_id
 JOIN t_country ON t_country.c_id = t_province.c_id` },
     { label: 'Electricity data/hour', query: `SELECT TOP 100 
-    JSON_VALUE(pa_data, '$.energy.todayHours') AS "Electricity data/hour", 
+    JSON_QUERY(pa_data, '$.energy.todayHours') AS "Electricity data/hour", 
     pa_code AS "Zip Code", 
     ci_name AS "City", 
     c_name AS "Country"
