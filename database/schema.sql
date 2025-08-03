@@ -1,6 +1,7 @@
 CREATE TABLE t_country (
     c_id VARCHAR(32) PRIMARY KEY,
-    c_name VARCHAR(255) NOT NULL
+    c_name VARCHAR(255) NOT NULL,
+    c_vat DECIMAL(5, 2) DEFAULT 0
 );
 
 CREATE TABLE t_province (
@@ -22,6 +23,7 @@ CREATE TABLE t_postal_area (
     pa_name VARCHAR(255),
     pa_code VARCHAR(50) NOT NULL,
     pa_data NVARCHAR(MAX),
+    pa_status_code INTEGER,
     ci_id VARCHAR(32),
     FOREIGN KEY (ci_id) REFERENCES t_city(ci_id)
 );

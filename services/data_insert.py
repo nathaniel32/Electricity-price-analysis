@@ -1,8 +1,6 @@
 from services.utils import config
 from database.models import TCountry, TProvince, TCity, TPostalArea
 import requests
-from datetime import datetime
-import pytz
 import time
 import random
 import json
@@ -46,9 +44,8 @@ class DataImporter:
                     response.raise_for_status()
 
                     area.pa_data = json.dumps(response.json())
-                    area.pa_updated_at = datetime.now(pytz.utc)
 
-                    print("\nPLZ:", pa_code, "\nTime: ", area.pa_updated_at, "\nData: ", str(area.pa_data)[0:200]+"...")
+                    print("\nPLZ:", pa_code, "\nData: ", str(area.pa_data)[0:200]+"...")
                     self.session.commit()
                 except requests.RequestException as e:
                     print("\nStatus Code:", area.pa_status_code)

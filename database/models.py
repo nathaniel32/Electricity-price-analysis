@@ -1,7 +1,4 @@
-from sqlalchemy import (
-    Column, String, Text, ForeignKey, Date, DateTime, Integer, Numeric,
-    PrimaryKeyConstraint
-)
+from sqlalchemy import Column, String, Text, ForeignKey, Date, DateTime, Integer, Numeric, DECIMAL, PrimaryKeyConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -12,6 +9,7 @@ class TCountry(model_base):
 
     c_id = Column(String(32), primary_key=True)
     c_name = Column(String(255), nullable=False)
+    c_vat = Column(DECIMAL(5, 2), default=0)
 
     provinces = relationship("TProvince", back_populates="country")
 
@@ -45,7 +43,6 @@ class TPostalArea(model_base):
     pa_name = Column(String(255))
     pa_code = Column(String(50), nullable=False)
     pa_data = Column(Text)  # JSON
-    pa_updated_at = Column(DateTime, nullable=True)
     pa_status_code = Column(Integer)
     ci_id = Column(String(32), ForeignKey('t_city.ci_id'))
 

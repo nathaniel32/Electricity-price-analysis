@@ -92,6 +92,7 @@ class DataManager:
             csv_path=country["csv"],
             sep=country["sep"],
             country_name=country["name"],
+            country_vat=country["vat"],
             province_header=country["province"],
             city_header=country["city"],
             additional_header=country["additional"],
