@@ -41,7 +41,7 @@ class DataManager:
             print("SQL file executed successfully.")
         except Exception as e:
             self.session.rollback()
-            print(f"Error: {e}")
+            print(f"Error: {str(e)[:500]}")
 
     def drop_all_tables(self):
         drop_fks = """
