@@ -16,7 +16,7 @@ class Connection:
         db_database: str = None,
         db_username: str = None,
         db_password: str = None,
-        database_url: str = None,
+        database_url: str = None
     ):
         if database_url:
             self.database_url = database_url
