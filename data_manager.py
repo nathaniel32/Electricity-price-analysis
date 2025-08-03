@@ -5,6 +5,7 @@ import services.geo_insert
 from services.utils import config
 from database.connection import Connection
 from sqlalchemy import text
+import sqlparse
 
 class DataManager:
     def __init__(self):
@@ -24,24 +25,76 @@ class DataManager:
         except Exception as e:
             print(f"Failed to create tables: {e}")
     
-    def run_sql_file(self):
-        filepath = input("File Path: ").strip().strip('"').strip("'")
-        print()
+    """ def run_sql_file(self):
+        while True:
+            filepath = input("File Path (or type 'exit' to quit): ").strip().strip('"').strip("'")
+            if filepath.lower() == 'exit':
+                print("Exiting.")
+                break
+            if not filepath:
+                continue
 
-        try:
-            with open(filepath, 'r', encoding='utf-8') as file:
-                sql_commands = file.read()
-        except FileNotFoundError:
-            print("File not found!")
-            return
-        
-        try:
-            self.session.execute(text(sql_commands))
-            self.session.commit()
-            print("SQL file executed successfully.")
-        except Exception as e:
-            self.session.rollback()
-            print(f"Error: {str(e)[:500]}")
+            try:
+                with open(filepath, 'r', encoding='utf-8') as file:
+                    sql_commands = file.read()
+            except FileNotFoundError:
+                print("File not found!")
+                return
+            
+            try:
+                self.session.execute(text(sql_commands))
+                self.session.commit()
+                print("SQL file executed successfully.")
+            except Exception as e:
+                self.session.rollback()
+                print(f"Error: {str(e)[:500]}") """
+    
+    def run_sql_file(self):
+        while True:
+            filepath = input("File Path (or type 'exit' to quit): ").strip().strip('"').strip("'")
+            if filepath.lower() == 'exit':
+                print("Exiting.")
+                break
+            if not filepath:
+                continue
+
+            # Baca isi file
+            try:
+                with open(filepath, 'r', encoding='utf-8-sig') as file:
+                    sql_commands = file.read()
+            except FileNotFoundError:
+                print("File not found!")
+                return
+
+            # Eksekusi per statement
+            statements = sqlparse.split(sql_commands)
+            success_count = 0
+            error_count = 0
+
+            for stmt in statements:
+                stmt = stmt.strip()
+                if not stmt:
+                    continue
+                try:
+                    self.session.execute(text(stmt))
+                    success_count += 1
+                except Exception as e:
+                    error_count += 1
+                    print("=" * 40)
+                    print("Error executing statement:")
+                    print(stmt[:500])
+                    print(f"🔺 Error: {str(e)[:500]}")
+                    print("=" * 40)
+
+            try:
+                self.session.commit()
+            except Exception as e:
+                print("Commit failed. Rolling back.")
+                self.session.rollback()
+                print(str(e)[:500])
+                return
+
+            print(f"\nDone. {success_count} statements executed successfully. {error_count} failed.\n")
 
     def drop_all_tables(self):
         drop_fks = """
