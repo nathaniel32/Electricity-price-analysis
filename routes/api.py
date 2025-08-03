@@ -33,11 +33,18 @@ class DataAPI:
 
         try:
             result = db.execute(text(query_text))
-            rows = result.fetchall()
-            
-            columns = result.keys()
-            data = [dict(zip(columns, row)) for row in rows]
+
+            if query_text.strip().lower().startswith(("insert", "update", "delete")):
+                db.commit()
+
+            try:
+                rows = result.fetchall()
+                columns = result.keys()
+                data = [dict(zip(columns, row)) for row in rows]
+            except Exception:
+                data = []
 
             return {"data": data}
         except Exception as e:
+            db.rollback()
             raise HTTPException(status_code=400, detail=str(e))
