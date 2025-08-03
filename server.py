@@ -1,7 +1,7 @@
 #import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes.api import DataAPI
+from routes.workbench import WorkbenchAPI
 from fastapi.staticfiles import StaticFiles
 
 class App:
@@ -9,7 +9,7 @@ class App:
         self.app = FastAPI()
         self.setup_middleware()
         self.app.mount("/public", StaticFiles(directory="public", html=True), name="public")
-        self.app.include_router(DataAPI().router)
+        self.app.include_router(WorkbenchAPI().router)
 
     def setup_middleware(self):
         self.app.add_middleware(

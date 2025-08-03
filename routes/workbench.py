@@ -12,9 +12,9 @@ db_connection.create_tables()
 class SQLQuery(BaseModel):
     query: str
 
-class DataAPI:
+class WorkbenchAPI:
     def __init__(self):
-        self.router = APIRouter(prefix="/api/control", tags=["Control"])
+        self.router = APIRouter(prefix="/api/workbench", tags=["Workbench"])
         self.router.add_api_route("/schema", self.schema, methods=["GET"])
         self.router.add_api_route("/query", self.query, methods=["POST"])
 

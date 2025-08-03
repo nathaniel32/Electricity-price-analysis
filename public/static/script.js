@@ -188,7 +188,7 @@ WHERE pa_code = '01307';
         async loadSchema() {
             this.loadingSchema = true;
             try {
-                const response = await fetch('/api/control/schema');
+                const response = await fetch('/api/workbench/schema');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -211,7 +211,7 @@ WHERE pa_code = '01307';
             this.currentPage = 1;
             
             try {
-                const response = await fetch('/api/control/query', {
+                const response = await fetch('/api/workbench/query', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
