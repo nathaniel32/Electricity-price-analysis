@@ -2,6 +2,7 @@ import services.utils
 import services.manage_proxy
 import services.data_insert
 import services.geo_insert
+import services.data_transform
 from services.utils import config
 from database.connection import Connection
 from sqlalchemy import text
@@ -58,7 +59,6 @@ class DataManager:
             if not filepath:
                 continue
 
-            # Baca isi file
             try:
                 with open(filepath, 'r', encoding='utf-8-sig') as file:
                     sql_commands = file.read()
@@ -66,7 +66,6 @@ class DataManager:
                 print("File not found!")
                 return
 
-            # Eksekusi per statement
             statements = sqlparse.split(sql_commands)
             success_count = 0
             error_count = 0
@@ -156,6 +155,7 @@ class DataManager:
 
     def run(self):
         self.start_session()
+        data_transform = services.data_transform.DataTransform(session=self.session)
         while True:
             print("\n================= MENU =================")
             print("1. Check Proxy IP")
@@ -163,6 +163,7 @@ class DataManager:
             print("2a. Create Table")
             print("2b. Drop All Table")
             print("2c. Import Data")
+            print("2d. Data Transform")
             print("=" * 40)
             for i, country in enumerate(config.COUNTRY_CONFIG, start=3):
                 print(f"{i}. Fetch and Save Data ({country['name']})")
@@ -188,6 +189,8 @@ class DataManager:
                 self.drop_all_tables()
             elif choice == '2c':
                 self.run_sql_file()
+            elif choice == '2d':
+                data_transform.transform()
             elif choice in map(str, range(3, 3 + len(config.COUNTRY_CONFIG))):
                 index = int(choice) - 3
                 self.fetch_and_save_data(config.COUNTRY_CONFIG[index])

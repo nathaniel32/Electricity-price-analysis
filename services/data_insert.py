@@ -22,7 +22,7 @@ class DataImporter:
             .join(TProvince, TProvince.p_id == TCity.p_id)
             .join(TCountry, TCountry.c_id == TProvince.c_id)
             .filter(
-                TPostalArea.pa_data == None,
+                TPostalArea.pa_data.is_(None),
                 TCountry.c_name == self.target_country
             )
             .all()
