@@ -35,11 +35,15 @@ queryShortcut: [
     { label: 'Province', query: 'SELECT * FROM t_province;' },
     { label: 'City', query: 'SELECT * FROM t_city;' },
     { label: 'Postal Area', query: 'SELECT TOP 100 * FROM t_postal_area;' },
+    { label: 'Date Time', query: `SELECT d_date, h_hour FROM t_date
+JOIN t_hour ON t_hour.d_id = t_date.d_id
+ORDER BY d_date, h_hour;` },
+    { label: 'Component', query: 'SELECT * FROM t_component;' },
     { label: 'Country, Province, City, Postal', query: `SELECT TOP 100 c_name, p_name, ci_name, pa_name, pa_code, pa_data 
 FROM t_postal_area 
 JOIN t_city ON t_city.ci_id = t_postal_area.ci_id 
 JOIN t_province ON t_province.p_id = t_city.p_id
-JOIN t_country ON t_country.c_id = t_province.c_id` },
+JOIN t_country ON t_country.c_id = t_province.c_id;` },
     { label: 'Electricity data/hour', query: `SELECT TOP 100 
     JSON_QUERY(pa_data, '$.energy.todayHours') AS "Electricity data/hour", 
     pa_code AS "Zip Code", 
