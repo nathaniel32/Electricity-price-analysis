@@ -82,9 +82,9 @@ class TComponent(model_base):
 class TValue(model_base):
     __tablename__ = 't_value'
 
-    pa_id = Column(String(32), ForeignKey('t_postal_area.pa_id'), nullable=False)
-    h_id = Column(String(32), ForeignKey('t_hour.h_id'), nullable=False)
-    co_id = Column(String(32), ForeignKey('t_component.co_id'), nullable=False)
+    pa_id = Column(String(32), ForeignKey('t_postal_area.pa_id'), primary_key=True)
+    h_id = Column(String(32), ForeignKey('t_hour.h_id'), primary_key=True)
+    co_id = Column(String(32), ForeignKey('t_component.co_id'), primary_key=True)
     v_value = Column(Numeric(19, 4))
 
     __table_args__ = (

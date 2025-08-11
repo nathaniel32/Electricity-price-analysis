@@ -1,7 +1,6 @@
 import pandas as pd
-import hashlib
-from services.utils import config
 from database.models import TCountry, TProvince, TCity, TPostalArea
+import services.utils
 
 class GeoImporter:
     def __init__(self, session, csv_path, sep, country_name, country_vat, province_header, city_header, additional_header, postal_code_header):
@@ -15,9 +14,6 @@ class GeoImporter:
         self.additional_header = additional_header
         self.postal_code_header = postal_code_header
 
-    def md5_hash(self, text):
-        return hashlib.md5(text.encode("utf-8")).hexdigest()
-
     def safe_lower(self, val):
         if pd.notna(val):
             return str(val).strip().lower()
@@ -28,7 +24,7 @@ class GeoImporter:
 
         print("0% [Country]")
         country_key = self.safe_lower(self.country_name)
-        c_id = self.md5_hash(country_key)
+        c_id = services.utils.md5_hash(country_key)
         country = self.session.query(TCountry).filter_by(c_id=c_id).first()
         if not country:
             country = TCountry(c_id=c_id, c_name=self.country_name, c_vat=self.country_vat)
@@ -40,7 +36,7 @@ class GeoImporter:
         provinces_seen = set()
         for province_name in df[self.province_header].dropna().unique():
             province_key = self.safe_lower(province_name)
-            p_id = self.md5_hash(country_key + province_key)
+            p_id = services.utils.md5_hash(country_key + province_key)
             if p_id not in provinces_seen:
                 provinces_seen.add(p_id)
                 if not self.session.query(TProvince).filter_by(p_id=p_id).first():
@@ -58,10 +54,10 @@ class GeoImporter:
             if pd.notna(city_name) and pd.notna(province_name):
                 city_key = self.safe_lower(city_name)
                 province_key = self.safe_lower(province_name)
-                ci_id = self.md5_hash(country_key + province_key + city_key)
+                ci_id = services.utils.md5_hash(country_key + province_key + city_key)
                 if ci_id not in cities_seen:
                     cities_seen.add(ci_id)
-                    p_id = self.md5_hash(country_key + province_key)
+                    p_id = services.utils.md5_hash(country_key + province_key)
                     if not self.session.query(TCity).filter_by(ci_id=ci_id).first():
                         city = TCity(ci_id=ci_id, ci_name=city_name, p_id=p_id)
                         self.session.add(city)
@@ -84,7 +80,7 @@ class GeoImporter:
                 postal_key = self.safe_lower(postal_code)
                 
                 #pa_id = self.md5_hash(country_key + province_key + city_key + postal_key) # all postal
-                pa_id = self.md5_hash(country_key + postal_key) # uniq postal pro country
+                pa_id = services.utils.md5_hash(country_key + postal_key) # uniq postal pro country
 
                 if pa_id not in postal_seen:
                     postal_seen.add(pa_id)
@@ -92,7 +88,7 @@ class GeoImporter:
                     if pd.notna(additional) and str(additional).strip():
                         pa_name = str(additional).strip()
 
-                    ci_id = self.md5_hash(country_key + province_key + city_key)
+                    ci_id = services.utils.md5_hash(country_key + province_key + city_key)
                     if not self.session.query(TPostalArea).filter_by(pa_id=pa_id).first():
                         postal_area = TPostalArea(
                             pa_id=pa_id,
