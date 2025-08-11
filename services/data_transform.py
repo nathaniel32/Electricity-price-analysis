@@ -1,4 +1,4 @@
-from database.models import TPostalArea, TValue
+from database.models import TPostalArea, TValue, TDate, THour, TComponent
 from services.utils import config
 import json
 
