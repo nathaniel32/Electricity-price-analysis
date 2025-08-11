@@ -5,6 +5,26 @@ import json
 class DataTransform:
     def __init__(self, session):
         self.session = session
+        self.existing_dates = set()
+        self.existing_hours = set()
+        self.existing_components = set()
+        self._load_existing_data()
+    
+    def _load_existing_data(self):
+        """Load existing IDs into cache"""
+        # Load dates
+        existing_date_ids = self.session.query(TDate.d_id).all()
+        self.existing_dates = {date_id[0] for date_id in existing_date_ids}
+        
+        # Load hours
+        existing_hour_ids = self.session.query(THour.h_id).all()
+        self.existing_hours = {hour_id[0] for hour_id in existing_hour_ids}
+        
+        # Load components
+        existing_component_ids = self.session.query(TComponent.co_id).all()
+        self.existing_components = {comp_id[0] for comp_id in existing_component_ids}
+        
+        print(f"Cache initialized: {len(self.existing_dates)} dates, {len(self.existing_hours)} hours, {len(self.existing_components)} components")
     
     def transform(self):
         areas = (
@@ -30,7 +50,6 @@ class DataTransform:
                     .first()
                 )
                 
-                # Fix: Use dot notation instead of dictionary access
                 postal_json_data = json.loads(t_postal_area.pa_data)
 
                 for date_component_config in services.utils.config.DATE_COMPONENTS_CONFIG:
@@ -42,22 +61,22 @@ class DataTransform:
 
                         # Generate unique IDs
                         date_id = services.utils.md5_hash(date)
-                        hour_id = services.utils.md5_hash(f"{date}_{hour}")  # Make hour ID unique per date
+                        hour_id = services.utils.md5_hash(f"{date}_{hour}")
 
-                        # Check if TDate already exists, if not create it
-                        existing_date = self.session.query(TDate).filter(TDate.d_id == date_id).first()
-                        if not existing_date:
+                        # Check cache
+                        if date_id not in self.existing_dates:
                             t_date = TDate(d_id=date_id, d_date=date)
                             self.session.add(t_date)
-                            # Flush to ensure the date is available for the hour relationship
+                            # Add to cache
+                            self.existing_dates.add(date_id)
                             self.session.flush()
 
-                        # Check if THour already exists, if not create it
-                        existing_hour = self.session.query(THour).filter(THour.h_id == hour_id).first()
-                        if not existing_hour:
-                            # Fix: Use d_id instead of d_date for foreign key
+                        # Check cache
+                        if hour_id not in self.existing_hours:
                             t_hour = THour(h_id=hour_id, d_id=date_id, h_hour=hour)
                             self.session.add(t_hour)
+                            # Add to cache
+                            self.existing_hours.add(hour_id)
                             self.session.flush()
                         
                         #print()
@@ -69,19 +88,19 @@ class DataTransform:
                                 if price_component["type"] in price_component_config["alias"]:
                                     #print(price_component_config["name"], " -> ", price_component["priceExcludingVat"])
                                     
-                                    # Check if TComponent already exists, if not create it
+                                    # Check cache
                                     component_id = services.utils.md5_hash(price_component_config["name"])
-                                    existing_component = self.session.query(TComponent).filter(TComponent.co_id == component_id).first()
-                                    if not existing_component:
+                                    if component_id not in self.existing_components:
                                         t_component = TComponent(
                                             co_id=component_id, 
                                             co_name=price_component_config["name"]
                                         )
                                         self.session.add(t_component)
+                                        # Add to cache
+                                        self.existing_components.add(component_id)
                                         self.session.flush()
 
                                     # Create TValue record
-                                    # Fix: Use proper attribute access and correct IDs
                                     t_value = TValue(
                                         pa_id=t_postal_area.pa_id, 
                                         h_id=hour_id, 
@@ -90,14 +109,13 @@ class DataTransform:
                                     )
                                     self.session.add(t_value)
 
-                # Commit changes for this postal area
                 self.session.commit()
                 print(f"Successfully processed postal area: {area.pa_code}")
                 
             except Exception as e:
                 print(f"Error processing postal area {area.pa_code}: {e}")
                 self.session.rollback()
-                # Continue with next area instead of stopping
+                self._load_existing_data()
                 continue
 
         print("Data transformation completed!")
