@@ -8,7 +8,7 @@ class DataTransform:
     
     def transform(self):
         areas = (
-            self.session.query(TPostalArea.pa_code)
+            self.session.query(TPostalArea.pa_id, TPostalArea.pa_code)
             .outerjoin(TValue, TValue.pa_id == TPostalArea.pa_id)
             .filter(TPostalArea.pa_data.isnot(None), TValue.pa_id.is_(None))
             .all()
@@ -22,10 +22,11 @@ class DataTransform:
 
         for area in areas:
             try:
-                print(area.pa_code)
+                print(area.pa_id)
+                
                 t_postal_area = (
                     self.session.query(TPostalArea.pa_id, TPostalArea.pa_data)
-                    .filter(TPostalArea.pa_code == area.pa_code)
+                    .filter(TPostalArea.pa_id == area.pa_id)
                     .first()
                 )
                 
