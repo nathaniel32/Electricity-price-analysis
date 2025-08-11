@@ -8,7 +8,6 @@ class DataTransform:
         self.existing_dates = set()
         self.existing_hours = set()
         self.existing_components = set()
-        self._load_existing_data()
     
     def _load_existing_data(self):
         """Load existing IDs into cache"""
@@ -27,6 +26,8 @@ class DataTransform:
         print(f"Cache initialized: {len(self.existing_dates)} dates, {len(self.existing_hours)} hours, {len(self.existing_components)} components")
     
     def transform(self):
+        self._load_existing_data()
+        
         areas = (
             self.session.query(TPostalArea.pa_id, TPostalArea.pa_code)
             .outerjoin(TValue, TValue.pa_id == TPostalArea.pa_id)
