@@ -104,7 +104,7 @@ CROSS APPLY OPENJSON(JSON_QUERY(pa_data, '$.energy.todayHours')) AS hourly_data
 
 WHERE pa_code = '01307';
 ` },
-    { label: 'Electricity Price in Hour', query: `SELECT
+    { label: 'Electricity Price in Hour JSON', query: `SELECT
   JSON_VALUE(hourly_data.value, '$.date') AS "Date", 
   JSON_VALUE(hourly_data.value, '$.hour') AS "Hour", 
   CAST(JSON_VALUE(hourly_data.value, '$.priceIncludingVat') AS DECIMAL(10,4)) AS "Gesamtpreis",
@@ -132,6 +132,14 @@ CROSS APPLY OPENJSON(JSON_QUERY(pa_data, '$.energy.todayHours')) AS hourly_data
 
 WHERE pa_code = '01307';
 ` },
+    { label: 'Electricity Price Components in Hour', query: `SELECT t_component.co_name, t_hour.h_hour, t_date.d_date, t_value.v_value, t_postal_area.pa_code, t_postal_area.pa_data
+FROM t_value
+JOIN t_hour ON t_hour.h_id = t_value.h_id
+JOIN t_date ON t_date.d_id = t_hour.d_id
+JOIN t_component ON t_component.co_id = t_value.co_id 
+JOIN t_postal_area ON t_postal_area.pa_id = t_value.pa_id
+WHERE t_postal_area.pa_code = 01307
+ORDER BY d_date, h_hour;` },
 ]
     },
     computed: {
