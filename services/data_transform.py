@@ -27,7 +27,10 @@ class DataTransform:
             for date_component_config in config.DATE_COMPONENTS_CONFIG:
                 hours_json = json_data["energy"][date_component_config]
                 for hour_json in hours_json:
+                    date = hour_json["date"]
                     hour = hour_json["hour"]
+                    print()
+                    print(date)
                     print(hour)
                     for price_component in hour_json["priceComponents"]:
                         for price_conponent_config in config.PRICE_COMPONENTS_CONFIG:
