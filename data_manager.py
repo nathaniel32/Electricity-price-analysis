@@ -145,6 +145,7 @@ class DataManager:
             sep=country["sep"],
             country_name=country["name"],
             country_vat=country["vat"],
+            country_currency=country["currency"],
             province_header=country["province"],
             city_header=country["city"],
             additional_header=country["additional"],

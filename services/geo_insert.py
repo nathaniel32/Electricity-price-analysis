@@ -3,12 +3,13 @@ from database.models import TCountry, TProvince, TCity, TPostalArea
 import services.utils
 
 class GeoImporter:
-    def __init__(self, session, csv_path, sep, country_name, country_vat, province_header, city_header, additional_header, postal_code_header):
+    def __init__(self, session, csv_path, sep, country_name, country_vat, country_currency, province_header, city_header, additional_header, postal_code_header):
         self.session = session
         self.csv_path = csv_path
         self.sep = sep
         self.country_name = country_name
         self.country_vat = country_vat
+        self.country_currency = country_currency
         self.province_header = province_header
         self.city_header = city_header
         self.additional_header = additional_header
@@ -27,7 +28,7 @@ class GeoImporter:
         c_id = services.utils.md5_hash(country_key)
         country = self.session.query(TCountry).filter_by(c_id=c_id).first()
         if not country:
-            country = TCountry(c_id=c_id, c_name=self.country_name, c_vat=self.country_vat)
+            country = TCountry(c_id=c_id, c_name=self.country_name, c_vat=self.country_vat, c_currency=self.country_currency)
             self.session.add(country)
             self.session.commit()
 
