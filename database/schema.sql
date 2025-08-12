@@ -1,7 +1,8 @@
 CREATE TABLE t_country (
     c_id VARCHAR(32) PRIMARY KEY,
     c_name VARCHAR(255) NOT NULL,
-    c_vat DECIMAL(5, 2) DEFAULT 0
+    c_vat DECIMAL(5,4) DEFAULT 0,
+    c_currency DECIMAL(10,8) DEFAULT 1
 );
 
 CREATE TABLE t_province (
@@ -37,7 +38,7 @@ CREATE TABLE t_hour (
     h_id VARCHAR(32) PRIMARY KEY,
     d_id VARCHAR(32) NOT NULL,
     h_hour INTEGER NOT NULL,
-    FOREIGN KEY (d_id) REFERENCES t_date(d_id),
+    FOREIGN KEY (d_id) REFERENCES t_date(d_id)
 );
 
 CREATE TABLE t_component (
@@ -49,7 +50,7 @@ CREATE TABLE t_value (
     pa_id VARCHAR(32),
     h_id VARCHAR(32),
     co_id VARCHAR(32),
-    v_value MONEY,
+    v_value DECIMAL(10,8),
     CONSTRAINT pk_t_price PRIMARY KEY (pa_id, h_id, co_id),
     FOREIGN KEY (pa_id) REFERENCES t_postal_area(pa_id),
     FOREIGN KEY (h_id) REFERENCES t_hour(h_id),

@@ -10,6 +10,7 @@ class TCountry(model_base):
     c_id = Column(String(32), primary_key=True)
     c_name = Column(String(255), nullable=False)
     c_vat = Column(DECIMAL(5, 2), default=0)
+    c_currency = Column(DECIMAL(10, 8), default=1)
 
     provinces = relationship("TProvince", back_populates="country")
 
@@ -85,7 +86,7 @@ class TValue(model_base):
     pa_id = Column(String(32), ForeignKey('t_postal_area.pa_id'), primary_key=True)
     h_id = Column(String(32), ForeignKey('t_hour.h_id'), primary_key=True)
     co_id = Column(String(32), ForeignKey('t_component.co_id'), primary_key=True)
-    v_value = Column(Numeric(19, 4))
+    v_value = Column(DECIMAL(10, 8))
 
     __table_args__ = (
         PrimaryKeyConstraint('pa_id', 'h_id', 'co_id', name='pk_t_value'),
