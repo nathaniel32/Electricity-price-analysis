@@ -142,7 +142,7 @@ JOIN t_date ON t_date.d_id = t_value.d_id
 JOIN t_component ON t_component.co_id = t_value.co_id 
 JOIN t_postal_area ON t_postal_area.pa_id = t_value.pa_id
 WHERE t_postal_area.pa_code = 01307
-ORDER BY d_date, h_hour;` },
+ORDER BY t_postal_area.pa_code, t_date.d_date, t_hour.h_hour;` },
 ]
     },
     computed: {
