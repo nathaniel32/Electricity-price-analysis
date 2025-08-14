@@ -53,6 +53,10 @@ class DataTransform:
                 
                 postal_json_data = json.loads(t_postal_area.pa_data)
 
+                if "energy" not in postal_json_data:
+                    print(f"Invalid JSON structure for {area.pa_code}")
+                    continue
+
                 for date_component_config in services.utils.config.DATE_COMPONENTS_CONFIG:
                     hours_json = postal_json_data["energy"][date_component_config]
                     
@@ -62,7 +66,7 @@ class DataTransform:
 
                         # Generate unique IDs
                         date_id = services.utils.md5_hash(date)
-                        hour_id = services.utils.md5_hash(f"{date}_{hour}")
+                        hour_id = services.utils.md5_hash(hour)
 
                         # Check cache
                         if date_id not in self.existing_dates:
@@ -74,7 +78,7 @@ class DataTransform:
 
                         # Check cache
                         if hour_id not in self.existing_hours:
-                            t_hour = THour(h_id=hour_id, d_id=date_id, h_hour=hour)
+                            t_hour = THour(h_id=hour_id, h_hour=hour)
                             self.session.add(t_hour)
                             # Add to cache
                             self.existing_hours.add(hour_id)
@@ -103,8 +107,9 @@ class DataTransform:
 
                                     # Create TValue record
                                     t_value = TValue(
-                                        pa_id=t_postal_area.pa_id, 
-                                        h_id=hour_id, 
+                                        pa_id=t_postal_area.pa_id,
+                                        d_id=date_id,
+                                        h_id=hour_id,
                                         co_id=component_id, 
                                         v_value=price_component["priceExcludingVat"]
                                     )

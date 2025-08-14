@@ -57,17 +57,15 @@ class TDate(model_base):
     d_id = Column(String(32), primary_key=True)
     d_date = Column(Date, nullable=False, unique=True)
 
-    hours = relationship("THour", back_populates="date")
+    values = relationship("TValue", back_populates="date")
 
 
 class THour(model_base):
     __tablename__ = 't_hour'
 
     h_id = Column(String(32), primary_key=True)
-    d_id = Column(String(32), ForeignKey('t_date.d_id'), nullable=False)
     h_hour = Column(Integer, nullable=False)
 
-    date = relationship("TDate", back_populates="hours")
     values = relationship("TValue", back_populates="hour")
 
 
@@ -84,14 +82,16 @@ class TValue(model_base):
     __tablename__ = 't_value'
 
     pa_id = Column(String(32), ForeignKey('t_postal_area.pa_id'), primary_key=True)
+    d_id = Column(String(32), ForeignKey('t_date.d_id'), primary_key=True)
     h_id = Column(String(32), ForeignKey('t_hour.h_id'), primary_key=True)
     co_id = Column(String(32), ForeignKey('t_component.co_id'), primary_key=True)
     v_value = Column(DECIMAL(10, 8))
 
     __table_args__ = (
-        PrimaryKeyConstraint('pa_id', 'h_id', 'co_id', name='pk_t_value'),
+        PrimaryKeyConstraint('pa_id', 'd_id', 'h_id', 'co_id', name='pk_t_value'),
     )
 
     postal_area = relationship("TPostalArea", back_populates="values")
+    date = relationship("TDate", back_populates="values")
     hour = relationship("THour", back_populates="values")
     component = relationship("TComponent", back_populates="values")

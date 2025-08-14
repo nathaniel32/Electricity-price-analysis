@@ -36,9 +36,7 @@ CREATE TABLE t_date (
 
 CREATE TABLE t_hour (
     h_id VARCHAR(32) PRIMARY KEY,
-    d_id VARCHAR(32) NOT NULL,
-    h_hour INTEGER NOT NULL,
-    FOREIGN KEY (d_id) REFERENCES t_date(d_id)
+    h_hour INTEGER NOT NULL
 );
 
 CREATE TABLE t_component (
@@ -48,11 +46,13 @@ CREATE TABLE t_component (
 
 CREATE TABLE t_value (
     pa_id VARCHAR(32),
+    d_id VARCHAR(32),
     h_id VARCHAR(32),
     co_id VARCHAR(32),
     v_value DECIMAL(10,8),
-    CONSTRAINT pk_t_price PRIMARY KEY (pa_id, h_id, co_id),
+    CONSTRAINT pk_t_price PRIMARY KEY (pa_id, d_id, h_id, co_id),
     FOREIGN KEY (pa_id) REFERENCES t_postal_area(pa_id),
+    FOREIGN KEY (d_id) REFERENCES t_date(d_id),
     FOREIGN KEY (h_id) REFERENCES t_hour(h_id),
     FOREIGN KEY (co_id) REFERENCES t_component(co_id)
 );
