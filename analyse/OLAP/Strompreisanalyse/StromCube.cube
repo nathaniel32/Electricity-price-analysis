@@ -1,0 +1,768 @@
+﻿<Cube xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="c07edd6c-f715-41e2-a2ff-82768187151f" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>StromCube</ID>
+  <Name>StromCube</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
+      <Value>
+        <dds xmlns="">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="32" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-11323" scrolltop="-5000" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="75" x="28681" y="16325" backcolor="16777215" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+            <font>
+              <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
+            </font>
+            <mouseicon>
+              <ddsxmlobjectstreamwrapper binary="6c74000000000000" />
+            </mouseicon>
+          </diagram>
+          <layoutmanager>
+            <ddsxmlobj />
+          </layoutmanager>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge" tooltip="t_component" left="2834" top="19231" logicalid="16" controlid="1" masterid="0" hint1="0" hint2="0" width="3000" height="1879" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000e0000b80b000057070000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_t_component" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge" tooltip="t_date" left="8234" top="11967" logicalid="17" controlid="2" masterid="0" hint1="0" hint2="0" width="3000" height="1879" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000e0000b80b000057070000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_t_date" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge" tooltip="t_hour" left="8234" top="16246" logicalid="18" controlid="3" masterid="0" hint1="0" hint2="0" width="3000" height="2725" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000e0000b80b0000a50a0000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_t_hour" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge" tooltip="t_province" left="5648" top="5125" logicalid="19" controlid="4" masterid="0" hint1="0" hint2="0" width="3000" height="2302" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000e0000b80b0000fe080000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_t_province" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge" tooltip="t_city" left="248" top="2562" logicalid="20" controlid="5" masterid="0" hint1="0" hint2="0" width="3000" height="2302" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000e0000b80b0000fe080000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_t_city" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge" tooltip="t_country" left="5648" top="0" logicalid="21" controlid="6" masterid="0" hint1="0" hint2="0" width="3000" height="2725" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000e0000b80b0000a50a0000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_t_country" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge" tooltip="t_postal_area" left="20" top="7264" logicalid="22" controlid="7" masterid="0" hint1="0" hint2="0" width="3228" height="3572" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000e00009c0c0000f40d0000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_t_postal_area" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge" tooltip="t_value" left="2834" top="14106" logicalid="23" controlid="8" masterid="0" hint1="0" hint2="0" width="3000" height="2725" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000e0000b80b0000a50a0000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_t_value" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="3935" top="16531" logicalid="24" controlid="9" masterid="0" hint1="0" hint2="0" width="799" height="3200" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK__t_value__co_id__4BAC3F29]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="8" sourceattachpoint="4" destattachpoint="5" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="4334" y="19231" />
+              <point x="4334" y="16831" />
+            </connector>
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="9335" top="13347" logicalid="25" controlid="10" masterid="0" hint1="0" hint2="0" width="799" height="3199" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK__t_hour__d_id__412EB0B6]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="2" destid="3" sourceattachpoint="5" destattachpoint="4" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="9734" y="13846" />
+              <point x="9734" y="16246" />
+            </connector>
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="5534" top="15168" logicalid="26" controlid="11" masterid="0" hint1="0" hint2="0" width="3000" height="2840" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK__t_value__h_id__4AB81AF0]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="3" destid="8" sourceattachpoint="14" destattachpoint="15" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="8234" y="17608" />
+              <point x="7034" y="17608" />
+              <point x="7034" y="15468" />
+              <point x="5834" y="15468" />
+            </connector>
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="6749" top="2226" logicalid="27" controlid="12" masterid="0" hint1="0" hint2="0" width="799" height="3199" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK__t_province__c_id__3E52440B]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="6" destid="4" sourceattachpoint="5" destattachpoint="4" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="7148" y="2725" />
+              <point x="7148" y="5125" />
+            </connector>
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="2948" top="3413" logicalid="28" controlid="13" masterid="0" hint1="0" hint2="0" width="3000" height="3263" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK__t_city__p_id__440B1D61]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="4" destid="5" sourceattachpoint="12" destattachpoint="13" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="5648" y="6276" />
+              <point x="4448" y="6276" />
+              <point x="4448" y="3713" />
+              <point x="3248" y="3713" />
+            </connector>
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="1334" top="4365" logicalid="29" controlid="14" masterid="0" hint1="0" hint2="0" width="814" height="3199" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK__t_postal___ci_id__46E78A0C]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="5" destid="7" sourceattachpoint="5" destattachpoint="4" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="1748" y="4864" />
+              <point x="1748" y="6064" />
+              <point x="1634" y="6064" />
+              <point x="1634" y="7264" />
+            </connector>
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="1235" top="10337" logicalid="30" controlid="15" masterid="0" hint1="0" hint2="0" width="3399" height="4069" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[FK__t_value__pa_id__49C3F6B7]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="7" destid="8" sourceattachpoint="5" destattachpoint="4" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="1634" y="10836" />
+              <point x="1634" y="12471" />
+              <point x="4334" y="12471" />
+              <point x="4334" y="14106" />
+            </connector>
+          </ddscontrol>
+        </dds>
+      </Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowRelationshipNames</Name>
+      <Value>false</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:UseDiagramDefaultLayout</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
+      <Value>-11323</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
+      <Value>-5000</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
+      <Value>20</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingTop</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramZoom</Name>
+      <Value>75</Value>
+    </Annotation>
+  </Annotations>
+  <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+  <State>Unprocessed</State>
+  <Dimensions>
+    <Dimension dwd:design-time-name="47aa082e-2b61-440c-9c27-f5f3fcafb169">
+      <ID>Geographie</ID>
+      <Name>Geographie</Name>
+      <DimensionID>Geographie</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="e63e19c8-9c7f-4212-bb2f-1e332e51a357">
+          <AttributeID>Pa Id</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="1e03b2a2-db62-46d0-a161-58e540e9083c">
+          <AttributeID>Ci Id</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="4aeec747-5032-4de0-b97b-703cc8c4c392">
+          <AttributeID>p Id</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="187946ce-a5c2-448b-acdd-e31b7db3438f">
+          <AttributeID>c Id</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="c7cfe366-09de-42dd-849c-908274e7a087">
+          <AttributeID>c Vat</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="3005dc16-f222-47af-802c-d279edb477de">
+          <AttributeID>c Currency</AttributeID>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy dwd:design-time-name="b08f6c52-226c-4a6b-835e-6639a5d52356">
+          <HierarchyID>Hierarchie</HierarchyID>
+        </Hierarchy>
+      </Hierarchies>
+    </Dimension>
+    <Dimension dwd:design-time-name="f7d4ca45-48ba-49ce-90ab-26eecd9d2ffc">
+      <ID>Zeit</ID>
+      <Name>Zeit</Name>
+      <DimensionID>Zeit</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="283cfbee-9033-4278-a8ac-1cbb51d575dd">
+          <AttributeID>h Id</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="a4a23bbf-7c36-4cfe-bde4-49047da90aba">
+          <AttributeID>d Id</AttributeID>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy dwd:design-time-name="b6d48fa9-7ab4-47b5-b491-76d8bea78d2d">
+          <HierarchyID>Hierarchie</HierarchyID>
+        </Hierarchy>
+      </Hierarchies>
+    </Dimension>
+    <Dimension dwd:design-time-name="9da20bbc-c8cb-461b-a1f6-92c169373fb6">
+      <ID>Preis</ID>
+      <Name>Preis</Name>
+      <DimensionID>Preis</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="01e77bbf-bfb1-46ad-855e-a70b6fdc47dd">
+          <AttributeID>Co Id</AttributeID>
+        </Attribute>
+      </Attributes>
+    </Dimension>
+  </Dimensions>
+  <MeasureGroups>
+    <MeasureGroup dwd:design-time-name="9f35500a-ec46-484b-b707-cba88ff82084">
+      <ID>t Value</ID>
+      <Name>Preisdaten</Name>
+      <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+      <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+      <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+      <State>Unprocessed</State>
+      <Measures>
+        <Measure dwd:design-time-name="312b2d58-9f19-4699-bd86-ba3a45fef89d">
+          <ID>v Value  Minimum</ID>
+          <Name>Minimum</Name>
+          <AggregateFunction>Min</AggregateFunction>
+          <Source dwd:design-time-name="760bf8b5-0bf0-4a1a-88a9-b96d302ba207">
+            <DataType>Double</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="c1fc0ab2-bbd7-4275-baa5-1dc434be84dc">
+              <TableID>dbo_t_value</TableID>
+              <ColumnID>v_value</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+        <Measure dwd:design-time-name="4002cf94-8243-40c3-9dcf-758fa8c322a1">
+          <ID>v Value  Maximum</ID>
+          <Name>Maximum</Name>
+          <AggregateFunction>Max</AggregateFunction>
+          <Source dwd:design-time-name="f6814c9b-08dd-4a55-8b17-f9a898d225b3">
+            <DataType>Double</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="023661d9-bb3a-49b6-adcb-9191307060bb">
+              <TableID>dbo_t_value</TableID>
+              <ColumnID>v_value</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+        <Measure dwd:design-time-name="a7514778-0b9a-4f9a-9cf9-11662958f42d">
+          <ID>Preisdaten  Anzahl</ID>
+          <Name>Anzahl</Name>
+          <AggregateFunction>Count</AggregateFunction>
+          <Source dwd:design-time-name="9cbddad6-39f7-4844-b38e-38c67581f8ea">
+            <DataType>Integer</DataType>
+            <DataSize>4</DataSize>
+            <Source xsi:type="RowBinding" dwd:design-time-name="95bef377-a9be-43f3-aff6-670bd1c8fcc3">
+              <TableID>dbo_t_value</TableID>
+            </Source>
+          </Source>
+        </Measure>
+        <Measure dwd:design-time-name="5ef07713-85ac-4401-b63f-7a2dedb65c2f">
+          <ID>v Value</ID>
+          <Name>Summe</Name>
+          <Source dwd:design-time-name="5f76fe87-7d28-4fa3-a66a-242174f570e7">
+            <DataType>Double</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="70e1bed7-72b8-4591-9739-db29ce998867">
+              <TableID>dbo_t_value</TableID>
+              <ColumnID>v_value</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+      </Measures>
+      <StorageMode>Molap</StorageMode>
+      <ProcessingMode>Regular</ProcessingMode>
+      <Dimensions>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="0eb34dab-c206-4fb5-a6e5-acbdc1a96a1a">
+          <CubeDimensionID>Geographie</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="b4a3a23f-551b-45b3-b8bf-ae223d2c967e">
+              <AttributeID>Pa Id</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="e0abdb06-a48d-4bfb-a5cf-ca26354253ab">
+                  <DataType>WChar</DataType>
+                  <DataSize>32</DataSize>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="68c13453-f818-4652-bf40-b0c0b41c9790">
+                    <TableID>dbo_t_value</TableID>
+                    <ColumnID>pa_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="117a94d8-7b45-40df-bfcc-1d697f3edbc8">
+          <CubeDimensionID>Zeit</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="887fbc39-574d-45ea-ab95-5f0d6716b4fd">
+              <AttributeID>h Id</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="c7bdd89e-73f3-4d04-9743-ab473206c5a9">
+                  <DataType>WChar</DataType>
+                  <DataSize>32</DataSize>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="4ecd0b53-6a3c-427c-829f-d1adac3f7138">
+                    <TableID>dbo_t_value</TableID>
+                    <ColumnID>h_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="0f09269a-3d77-442b-875d-a2631ba64fc9">
+          <CubeDimensionID>Preis</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="d4287139-160d-49aa-9e07-1318344ef154">
+              <AttributeID>Co Id</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="e50bc939-61aa-4bf3-b60d-33ca62e71382">
+                  <DataType>WChar</DataType>
+                  <DataSize>32</DataSize>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="3075a9ab-5380-4cb9-9782-dba6d03feed1">
+                    <TableID>dbo_t_value</TableID>
+                    <ColumnID>co_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+      </Dimensions>
+      <Partitions />
+    </MeasureGroup>
+  </MeasureGroups>
+  <Source dwd:design-time-name="687e5538-011c-4298-adc4-04ec47fc62f8">
+    <DataSourceViewID>Strom View</DataSourceViewID>
+  </Source>
+  <MdxScripts>
+    <MdxScript dwd:design-time-name="0862bb41-e9a8-4984-a280-35f7b2e95c4c">
+      <ID>MdxScript</ID>
+      <Name>MdxScript</Name>
+      <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+      <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+      <Commands>
+        <Command>
+          <Text>CALCULATE;
+
+-- Base Measures
+CREATE MEMBER CURRENTCUBE.[Measures].[Mehrwertsteuer] AS
+  Ancestor([Geographie].[Standort].CurrentMember, [Geographie].[Standort].[Land]).Properties("Mehrwertsteuer"),
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Eurokurs] AS
+  Ancestor([Geographie].[Standort].CurrentMember, [Geographie].[Standort].[Land]).Properties("Eurokurs"),
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Average]
+  AS [Measures].[Summe]/[Measures].[Anzahl], 
+  VISIBLE = 1;
+
+-- Zertifikat (Maximum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Zertifikat (Netto)(Maximum)(Euro)] AS
+  ([Preis].[Komponente].&amp;[e0d30cef5c6139275b58b525001b413c], [Measures].[Maximum]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Zertifikat (MwSt)(Maximum)(Euro)] AS
+  [Measures].[Zertifikat (Netto)(Maximum)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Zertifikat (Brutto)(Maximum)(Euro)] AS
+  [Measures].[Zertifikat (Netto)(Maximum)(Euro)] + [Measures].[Zertifikat (MwSt)(Maximum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Zertifikat (Minimum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Zertifikat (Netto)(Minimum)(Euro)] AS
+  ([Preis].[Komponente].&amp;[e0d30cef5c6139275b58b525001b413c], [Measures].[Minimum]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Zertifikat (MwSt)(Minimum)(Euro)] AS
+  [Measures].[Zertifikat (Netto)(Minimum)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Zertifikat (Brutto)(Minimum)(Euro)] AS
+  [Measures].[Zertifikat (Netto)(Minimum)(Euro)] + [Measures].[Zertifikat (MwSt)(Minimum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Zertifikat (Average)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Zertifikat (Netto)(Average)(Euro)] AS
+  ([Preis].[Komponente].&amp;[e0d30cef5c6139275b58b525001b413c], [Measures].[Average]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Zertifikat (MwSt)(Average)(Euro)] AS
+  [Measures].[Zertifikat (Netto)(Average)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Zertifikat (Brutto)(Average)(Euro)] AS
+  [Measures].[Zertifikat (Netto)(Average)(Euro)] + [Measures].[Zertifikat (MwSt)(Average)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Stromsteuer (Maximum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Stromsteuer (Netto)(Maximum)(Euro)] AS
+  ([Preis].[Komponente].&amp;[a6eabd1446efd5e2e6ed8fb2e57d657d], [Measures].[Maximum]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Stromsteuer (MwSt)(Maximum)(Euro)] AS
+  [Measures].[Stromsteuer (Netto)(Maximum)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Stromsteuer (Brutto)(Maximum)(Euro)] AS
+  [Measures].[Stromsteuer (Netto)(Maximum)(Euro)] + [Measures].[Stromsteuer (MwSt)(Maximum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Stromsteuer (Minimum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Stromsteuer (Netto)(Minimum)(Euro)] AS
+  ([Preis].[Komponente].&amp;[a6eabd1446efd5e2e6ed8fb2e57d657d], [Measures].[Minimum]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Stromsteuer (MwSt)(Minimum)(Euro)] AS
+  [Measures].[Stromsteuer (Netto)(Minimum)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Stromsteuer (Brutto)(Minimum)(Euro)] AS
+  [Measures].[Stromsteuer (Netto)(Minimum)(Euro)] + [Measures].[Stromsteuer (MwSt)(Minimum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Stromsteuer (Average)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Stromsteuer (Netto)(Average)(Euro)] AS
+  ([Preis].[Komponente].&amp;[a6eabd1446efd5e2e6ed8fb2e57d657d], [Measures].[Average]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Stromsteuer (MwSt)(Average)(Euro)] AS
+  [Measures].[Stromsteuer (Netto)(Average)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Stromsteuer (Brutto)(Average)(Euro)] AS
+  [Measures].[Stromsteuer (Netto)(Average)(Euro)] + [Measures].[Stromsteuer (MwSt)(Average)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Grid (Maximum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Grid (Netto)(Maximum)(Euro)] AS
+  ([Preis].[Komponente].&amp;[ff4a008470319a22d9cf3d14af485977], [Measures].[Maximum]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Grid (MwSt)(Maximum)(Euro)] AS
+  [Measures].[Grid (Netto)(Maximum)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Grid (Brutto)(Maximum)(Euro)] AS
+  [Measures].[Grid (Netto)(Maximum)(Euro)] + [Measures].[Grid (MwSt)(Maximum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Grid (Minimum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Grid (Netto)(Minimum)(Euro)] AS
+  ([Preis].[Komponente].&amp;[ff4a008470319a22d9cf3d14af485977], [Measures].[Minimum]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Grid (MwSt)(Minimum)(Euro)] AS
+  [Measures].[Grid (Netto)(Minimum)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Grid (Brutto)(Minimum)(Euro)] AS
+  [Measures].[Grid (Netto)(Minimum)(Euro)] + [Measures].[Grid (MwSt)(Minimum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Grid (Average)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Grid (Netto)(Average)(Euro)] AS
+  ([Preis].[Komponente].&amp;[ff4a008470319a22d9cf3d14af485977], [Measures].[Average]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Grid (MwSt)(Average)(Euro)] AS
+  [Measures].[Grid (Netto)(Average)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Grid (Brutto)(Average)(Euro)] AS
+  [Measures].[Grid (Netto)(Average)(Euro)] + [Measures].[Grid (MwSt)(Average)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Power (Maximum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Power (Netto)(Maximum)(Euro)] AS
+  ([Preis].[Komponente].&amp;[62cd275989e78ee56a81f0265a87562e], [Measures].[Maximum]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Power (MwSt)(Maximum)(Euro)] AS
+  [Measures].[Power (Netto)(Maximum)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Power (Brutto)(Maximum)(Euro)] AS
+  [Measures].[Power (Netto)(Maximum)(Euro)] + [Measures].[Power (MwSt)(Maximum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Power (Minimum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Power (Netto)(Minimum)(Euro)] AS
+  ([Preis].[Komponente].&amp;[62cd275989e78ee56a81f0265a87562e], [Measures].[Minimum]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Power (MwSt)(Minimum)(Euro)] AS
+  [Measures].[Power (Netto)(Minimum)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Power (Brutto)(Minimum)(Euro)] AS
+  [Measures].[Power (Netto)(Minimum)(Euro)] + [Measures].[Power (MwSt)(Minimum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Power (Average)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Power (Netto)(Average)(Euro)] AS
+  ([Preis].[Komponente].&amp;[62cd275989e78ee56a81f0265a87562e], [Measures].[Average]) * [Measures].[Eurokurs],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Power (MwSt)(Average)(Euro)] AS
+  [Measures].[Power (Netto)(Average)(Euro)] * [Measures].[Mehrwertsteuer],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Power (Brutto)(Average)(Euro)] AS
+  [Measures].[Power (Netto)(Average)(Euro)] + [Measures].[Power (MwSt)(Average)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+-- Gesamtpreis (Maximum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Gesamtpreis (Netto)(Maximum)(Euro)] AS
+  [Measures].[Zertifikat (Netto)(Maximum)(Euro)] + [Measures].[Stromsteuer (Netto)(Maximum)(Euro)] + [Measures].[Grid (Netto)(Maximum)(Euro)] + [Measures].[Power (Netto)(Maximum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Gesamtpreis (Brutto)(Maximum)(Euro)] AS
+  [Measures].[Zertifikat (Brutto)(Maximum)(Euro)] + [Measures].[Stromsteuer (Brutto)(Maximum)(Euro)] + [Measures].[Grid (Brutto)(Maximum)(Euro)] + [Measures].[Power (Brutto)(Maximum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Steuern und Abgaben (Maximum)(Euro)] AS
+  [Measures].[Gesamtpreis (Brutto)(Maximum)(Euro)]-[Measures].[Power (Netto)(Maximum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Steuern und Abgaben von Power (Prozent)(Maximum)(Euro)] AS
+  IIF([Measures].[Power (Netto)(Maximum)(Euro)] &lt;&gt; 0,
+    ([Measures].[Steuern und Abgaben (Maximum)(Euro)] / [Measures].[Power (Netto)(Maximum)(Euro)]) * 100,
+    NULL),
+  FORMAT_STRING = "#.##0,00 %;-#.##0,00 %",
+  VISIBLE = 1;
+
+-- Gesamtpreis (Minimum)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Gesamtpreis (Netto)(Minimum)(Euro)] AS
+  [Measures].[Zertifikat (Netto)(Minimum)(Euro)] + [Measures].[Stromsteuer (Netto)(Minimum)(Euro)] + [Measures].[Grid (Netto)(Minimum)(Euro)] + [Measures].[Power (Netto)(Minimum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Gesamtpreis (Brutto)(Minimum)(Euro)] AS
+  [Measures].[Zertifikat (Brutto)(Minimum)(Euro)] + [Measures].[Stromsteuer (Brutto)(Minimum)(Euro)] + [Measures].[Grid (Brutto)(Minimum)(Euro)] + [Measures].[Power (Brutto)(Minimum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Steuern und Abgaben (Minimum)(Euro)] AS
+  [Measures].[Gesamtpreis (Brutto)(Minimum)(Euro)]-[Measures].[Power (Netto)(Minimum)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Steuern und Abgaben von Power (Prozent)(Minimum)(Euro)] AS
+  IIF([Measures].[Power (Netto)(Minimum)(Euro)] &lt;&gt; 0,
+    ([Measures].[Steuern und Abgaben (Minimum)(Euro)] / [Measures].[Power (Netto)(Minimum)(Euro)]) * 100,
+    NULL),
+  FORMAT_STRING = "#.##0,00 %;-#.##0,00 %",
+  VISIBLE = 1;
+
+-- Gesamtpreis (Average)
+-- --------------------------------------------------
+CREATE MEMBER CURRENTCUBE.[Measures].[Gesamtpreis (Netto)(Average)(Euro)] AS
+  [Measures].[Zertifikat (Netto)(Average)(Euro)] + [Measures].[Stromsteuer (Netto)(Average)(Euro)] + [Measures].[Grid (Netto)(Average)(Euro)] + [Measures].[Power (Netto)(Average)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Gesamtpreis (Brutto)(Average)(Euro)] AS
+  [Measures].[Zertifikat (Brutto)(Average)(Euro)] + [Measures].[Stromsteuer (Brutto)(Average)(Euro)] + [Measures].[Grid (Brutto)(Average)(Euro)] + [Measures].[Power (Brutto)(Average)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Steuern und Abgaben (Average)(Euro)] AS
+  [Measures].[Gesamtpreis (Brutto)(Average)(Euro)]-[Measures].[Power (Netto)(Average)(Euro)],
+  FORMAT_STRING = "#.##0,00 €;-#.##0,00 €",
+  VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Steuern und Abgaben von Power (Prozent)(Average)(Euro)] AS
+  IIF([Measures].[Power (Netto)(Average)(Euro)] &lt;&gt; 0,
+    ([Measures].[Steuern und Abgaben (Average)(Euro)] / [Measures].[Power (Netto)(Average)(Euro)]) * 100,
+    NULL),
+  FORMAT_STRING = "#.##0,00 %;-#.##0,00 %",
+  VISIBLE = 1;</Text>
+        </Command>
+      </Commands>
+    </MdxScript>
+  </MdxScripts>
+</Cube>
