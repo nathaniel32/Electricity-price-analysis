@@ -66,7 +66,7 @@ class DataTransform:
 
                         # Generate unique IDs
                         date_id = services.utils.md5_hash(date)
-                        hour_id = services.utils.md5_hash(hour)
+                        hour_id = services.utils.md5_hash(str(hour))
 
                         # Check cache
                         if date_id not in self.existing_dates:

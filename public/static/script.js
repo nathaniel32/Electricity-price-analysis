@@ -35,9 +35,8 @@ queryShortcut: [
     { label: 'Province', query: 'SELECT * FROM t_province;' },
     { label: 'City', query: 'SELECT * FROM t_city;' },
     { label: 'Postal Area', query: 'SELECT TOP 100 * FROM t_postal_area;' },
-    { label: 'Date Time', query: `SELECT d_date, h_hour FROM t_date
-JOIN t_hour ON t_hour.d_id = t_date.d_id
-ORDER BY d_date, h_hour;` },
+    { label: 'Date', query: `SELECT * FROM t_date;` },
+    { label: 'Hour', query: `SELECT * FROM t_hour;` },
     { label: 'Component', query: 'SELECT * FROM t_component;' },
     { label: 'Country, Province, City, Postal', query: `SELECT TOP 100 c_name, p_name, ci_name, pa_name, pa_code, pa_data 
 FROM t_postal_area 
@@ -139,7 +138,7 @@ WHERE pa_code = '01307';
     { label: 'Electricity Price Components in Hour', query: `SELECT t_component.co_name, t_hour.h_hour, t_date.d_date, t_value.v_value, t_postal_area.pa_code, t_postal_area.pa_data
 FROM t_value
 JOIN t_hour ON t_hour.h_id = t_value.h_id
-JOIN t_date ON t_date.d_id = t_hour.d_id
+JOIN t_date ON t_date.d_id = t_value.d_id
 JOIN t_component ON t_component.co_id = t_value.co_id 
 JOIN t_postal_area ON t_postal_area.pa_id = t_value.pa_id
 WHERE t_postal_area.pa_code = 01307
