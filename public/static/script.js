@@ -35,8 +35,8 @@ queryShortcut: [
     { label: 'Province', query: 'SELECT * FROM t_province;' },
     { label: 'City', query: 'SELECT * FROM t_city;' },
     { label: 'Postal Area', query: 'SELECT TOP 100 * FROM t_postal_area;' },
-    { label: 'Date', query: `SELECT * FROM t_date;` },
-    { label: 'Hour', query: `SELECT * FROM t_hour;` },
+    { label: 'Date', query: `SELECT * FROM t_date ORDER BY d_date;` },
+    { label: 'Hour', query: `SELECT * FROM t_hour ORDER BY h_hour;` },
     { label: 'Component', query: 'SELECT * FROM t_component;' },
     { label: 'Country, Province, City, Postal', query: `SELECT TOP 100 c_name, p_name, ci_name, pa_name, pa_code, pa_data 
 FROM t_postal_area 
