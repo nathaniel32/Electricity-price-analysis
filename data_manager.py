@@ -7,6 +7,7 @@ from services.utils import config
 from database.connection import Connection
 from sqlalchemy import text
 import sqlparse
+import database.models
 
 class DataManager:
     def __init__(self):
@@ -103,6 +104,25 @@ class DataManager:
             self.session.rollback()
             print(f"Failed to drop tables: {e}")
 
+    def clean_pa_data(self):
+        print("Cleaning up pa_data...")
+        """ for obj in self.session.query(database.models.TPostalArea).all():
+            obj.pa_data = None
+            obj.pa_status_code = None """
+        try:
+            clean_pa_data = """
+                UPDATE t_postal_area
+                SET pa_status_code = NULL,
+                    pa_data = NULL;
+            """
+            self.session.execute(text(clean_pa_data))
+            self.session.commit()
+            print("pa_data cleanup complete.")
+        except Exception as e:
+            self.session.rollback()
+            print(f"Cleanup failed: {e}")
+            raise
+
     def fetch_and_save_data(self, country):
         importer = services.data_insert.DataImporter(
             session=self.session,
@@ -131,17 +151,19 @@ class DataManager:
         print(f"Geographic data for {country['name']} inserted.")
 
     def run(self):
+        self.start_session()
+        data_transform = services.data_transform.DataTransform(session=self.session)
+        
         menu_items = [
             ('Check Proxy IP', lambda: services.utils.check_ip()),
             ('Change Proxy IP', lambda: (services.manage_proxy.send_signal_newnym() if config.USE_PROXY else print("Change 'USE_PROXY=true' in config.json to use this service!"))),
             ('Create Table', lambda: self.create_tables()),
             ('Drop All Table', lambda: self.drop_all_tables()),
             ('Import Data', lambda: self.run_sql_file()),
-            ('Data Transform', lambda: data_transform.transform())
+            ('Data Transform', lambda: data_transform.transform()),
+            ('Clean pa_data', lambda: self.clean_pa_data())
         ]
 
-        self.start_session()
-        data_transform = services.data_transform.DataTransform(session=self.session)
         start_auto_menu = len(menu_items)+1
 
         while True:
