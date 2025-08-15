@@ -33,7 +33,8 @@ class BotManager:
         else:
             print("Nothing can be done!")
 
-        for area in areas:
+        for index, area in enumerate(areas, start=1):
+            print(f"{index}/{len(areas)}")
             pa_code = area.pa_code
             if area.pa_status_code != 400:
                 try:
