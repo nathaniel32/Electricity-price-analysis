@@ -19,7 +19,7 @@ class DataManager:
             ('Drop All Table', lambda: self.drop_all_tables()),
             ('Import Data', lambda: self.import_sql()),
             ('Data Transform', lambda: self.tranform_data()),
-            ('Clean pa_data', lambda: self.clean_pa_data())
+            ('Clean pa_data', lambda: self.bot_data_session_init())
         ]
 
     def start_session(self):
@@ -112,7 +112,7 @@ class DataManager:
             self.session.rollback()
             print(f"Failed to drop tables: {e}")
 
-    def clean_pa_data(self):
+    def bot_data_session_init(self):
         print("Cleaning up pa_data...")
         """ for obj in self.session.query(database.models.TPostalArea).all():
             obj.pa_data = None
