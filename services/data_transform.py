@@ -28,10 +28,16 @@ class DataTransform:
     def transform(self):
         self._load_existing_data()
         
-        areas = (
+        """ areas = (
             self.session.query(TPostalArea.pa_id, TPostalArea.pa_code)
             .outerjoin(TValue, TValue.pa_id == TPostalArea.pa_id)
             .filter(TPostalArea.pa_data.isnot(None), TValue.pa_id.is_(None))
+            .all()
+        ) """
+
+        areas = (
+            self.session.query(TPostalArea.pa_id, TPostalArea.pa_code)
+            .filter(TPostalArea.pa_data.isnot(None))
             .all()
         )
 
@@ -119,9 +125,9 @@ class DataTransform:
                 print(f"Successfully processed postal area: {area.pa_code}")
                 
             except Exception as e:
-                print(f"Error processing postal area {area.pa_code}: {e}")
+                print(f"Error processing postal area {area.pa_code}: {str(e)[:100]}")
                 self.session.rollback()
-                self._load_existing_data()
+                #self._load_existing_data()
                 continue
 
         print("Data transformation completed!")
