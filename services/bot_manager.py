@@ -34,7 +34,7 @@ class BotManager:
             print("Nothing can be done!")
 
         for index, area in enumerate(areas, start=1):
-            print(f"{index}/{len(areas)}")
+            print(f"\n{index}/{len(areas)}")
             pa_code = area.pa_code
             if area.pa_status_code != 400:
                 try:
@@ -46,7 +46,7 @@ class BotManager:
 
                     area.pa_data = json.dumps(response.json())
 
-                    print("\nPLZ:", pa_code, "\nData: ", str(area.pa_data)[0:200]+"...")
+                    print("PLZ:", pa_code, "\nData: ", str(area.pa_data)[0:200]+"...")
                     self.session.commit()
                 except requests.RequestException as e:
                     print("\nStatus Code:", area.pa_status_code)

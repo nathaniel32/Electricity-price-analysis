@@ -148,8 +148,6 @@ class TableManager:
         input_data = 0
         for index, area in enumerate(areas, start=1):
             try:
-                print(f"{index}/{len(areas)}: New Input Data: {input_data}")
-                
                 t_postal_area = (
                     self.session.query(TPostalArea.pa_id, TPostalArea.pa_data)
                     .filter(TPostalArea.pa_id == area.pa_id)
@@ -159,7 +157,7 @@ class TableManager:
                 postal_json_data = json.loads(t_postal_area.pa_data)
 
                 if "energy" not in postal_json_data:
-                    print(f"Invalid JSON structure for {area.pa_code}")
+                    print(f"\nInvalid JSON structure for {area.pa_code}")
                     continue
 
                 for date_component_config in services.utils.config.DATE_COMPONENTS_CONFIG:
@@ -217,13 +215,16 @@ class TableManager:
                                     self.session.add(t_value)
 
                 self.session.commit()
-                print(f"Successfully processed postal area: {area.pa_code}")
+                #print(f"\nSuccessfully processed postal area: {area.pa_code}")
                 input_data += 1
             except IntegrityError as e:
                 self.session.rollback()
             except Exception as e:
-                print(f"Error processing postal area {area.pa_code}: {e}")
+                print(f"\nError processing postal area {area.pa_code}: {e}")
                 self.session.rollback()
                 continue
 
-        print("Data transformation completed!")
+            if index % 10 == 0 or index == len(areas):
+                print(f"\r{index}/{len(areas)} | New Tabular Data: {input_data}", end='', flush=True)
+
+        print("\nData transformation completed!")
