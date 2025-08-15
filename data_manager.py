@@ -11,8 +11,17 @@ import database.models
 
 class DataManager:
     def __init__(self):
-        self.db_connection = Connection()
         self.session = None
+        self.db_connection = Connection()
+        self.menu_items = [
+            ('Check Proxy IP', lambda: services.utils.check_ip()),
+            ('Change Proxy IP', lambda: (services.manage_proxy.send_signal_newnym() if config.USE_PROXY else print("Change 'USE_PROXY=true' in config.json to use this service!"))),
+            ('Create Table', lambda: self.create_tables()),
+            ('Drop All Table', lambda: self.drop_all_tables()),
+            ('Import Data', lambda: self.run_sql_file()),
+            ('Data Transform', lambda: self.tranform_data()),
+            ('Clean pa_data', lambda: self.clean_pa_data())
+        ]
 
     def start_session(self):
         self.session = self.db_connection.get_session()
@@ -150,25 +159,16 @@ class DataManager:
         importer.load_and_insert()
         print(f"Geographic data for {country['name']} inserted.")
 
-    def run(self):
-        self.start_session()
+    def tranform_data(self):
         data_transform = services.data_transform.DataTransform(session=self.session)
-        
-        menu_items = [
-            ('Check Proxy IP', lambda: services.utils.check_ip()),
-            ('Change Proxy IP', lambda: (services.manage_proxy.send_signal_newnym() if config.USE_PROXY else print("Change 'USE_PROXY=true' in config.json to use this service!"))),
-            ('Create Table', lambda: self.create_tables()),
-            ('Drop All Table', lambda: self.drop_all_tables()),
-            ('Import Data', lambda: self.run_sql_file()),
-            ('Data Transform', lambda: data_transform.transform()),
-            ('Clean pa_data', lambda: self.clean_pa_data())
-        ]
+        data_transform.transform()
 
-        start_auto_menu = len(menu_items)+1
+    def menu(self):
+        start_auto_menu = len(self.menu_items)+1
 
         while True:
             print("\n================= MENU =================")
-            for i, (label, _) in enumerate(menu_items):
+            for i, (label, _) in enumerate(self.menu_items):
                 print(f"{i+1}. {label}")
             
             print("=" * 40)
@@ -187,7 +187,7 @@ class DataManager:
 
             if int(choice) < start_auto_menu:
                 index = int(choice) - 1
-                menu_items[index][1]()
+                self.menu_items[index][1]()
             elif choice in map(str, range(start_auto_menu, start_auto_menu + len(config.COUNTRY_CONFIG))):
                 index = int(choice) - start_auto_menu
                 self.fetch_and_save_data(config.COUNTRY_CONFIG[index])
@@ -199,8 +199,8 @@ class DataManager:
             else:
                 print("Invalid input!")
 
-        self.close_session()
-
 if __name__ == "__main__":
     app = DataManager()
-    app.run()
+    app.start_session()
+    app.menu()
+    app.close_session()
