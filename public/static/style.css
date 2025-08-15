@@ -19,7 +19,7 @@
     transition: all 0.3s ease;
 }
 .slide-enter, .slide-leave-to {
-    transform: translateX(100%);
+    tabular_transform: translateX(100%);
     opacity: 0;
 }
 .schema-panel {
