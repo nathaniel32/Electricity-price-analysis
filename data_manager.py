@@ -1,5 +1,4 @@
 import services.utils
-import services.manage_proxy
 import services.bot
 import services.geo_insert
 import services.data_transform
@@ -15,7 +14,7 @@ class DataManager:
         self.db_connection = Connection()
         self.menu_items = [
             ('Check Proxy IP', lambda: services.utils.check_ip()),
-            ('Change Proxy IP', lambda: (services.manage_proxy.send_signal_newnym() if config.USE_PROXY else print("Change 'USE_PROXY=true' in config.json to use this service!"))),
+            ('Change Proxy IP', lambda: (services.utils.send_signal_newnym() if config.USE_PROXY else print("Change 'USE_PROXY=true' in config.json to use this service!"))),
             ('Create Table', lambda: self.create_tables()),
             ('Drop All Table', lambda: self.drop_all_tables()),
             ('Import Data', lambda: self.import_sql()),
@@ -156,7 +155,7 @@ class DataManager:
             additional_header=country["additional"],
             postal_code_header=country["postal"]
         )
-        importer.load_and_insert()
+        importer.import_geo()
         print(f"Geographic data for {country['name']} inserted.")
 
     def tranform_data(self):

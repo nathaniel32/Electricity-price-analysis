@@ -20,7 +20,7 @@ class GeoImporter:
             return str(val).strip().lower()
         return ""
 
-    def load_and_insert(self):
+    def import_geo(self):
         df = pd.read_csv(self.csv_path, sep=self.sep, dtype={self.postal_code_header: str})
 
         print("0% [Country]")
