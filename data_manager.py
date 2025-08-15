@@ -25,31 +25,7 @@ class DataManager:
             print("All tables created successfully.")
         except Exception as e:
             print(f"Failed to create tables: {e}")
-    
-    """ def run_sql_file(self):
-        while True:
-            filepath = input("File Path (or type 'exit' to quit): ").strip().strip('"').strip("'")
-            if filepath.lower() == 'exit':
-                print("Exiting.")
-                break
-            if not filepath:
-                continue
-
-            try:
-                with open(filepath, 'r', encoding='utf-8') as file:
-                    sql_commands = file.read()
-            except FileNotFoundError:
-                print("File not found!")
-                return
-            
-            try:
-                self.session.execute(text(sql_commands))
-                self.session.commit()
-                print("SQL file executed successfully.")
-            except Exception as e:
-                self.session.rollback()
-                print(f"Error: {str(e)[:500]}") """
-    
+        
     def run_sql_file(self):
         while True:
             filepath = input("File Path (or type 'exit' to quit): ").strip().strip('"').strip("'")
@@ -157,22 +133,23 @@ class DataManager:
     def run(self):
         self.start_session()
         data_transform = services.data_transform.DataTransform(session=self.session)
+        index_data = 7
         while True:
             print("\n================= MENU =================")
             print("1. Check Proxy IP")
             print("2. Change Proxy IP")
-            print("2a. Create Table")
-            print("2b. Drop All Table")
-            print("2c. Import Data")
-            print("2d. Data Transform")
+            print("3. Create Table")
+            print("4. Drop All Table")
+            print("5. Import Data")
+            print("6. Data Transform")
             print("=" * 40)
-            for i, country in enumerate(config.COUNTRY_CONFIG, start=3):
+            for i, country in enumerate(config.COUNTRY_CONFIG, start=index_data):
                 print(f"{i}. Fetch and Save Data ({country['name']})")
             print("=" * 40)
-            for i, country in enumerate(config.COUNTRY_CONFIG, start=7):
+            for i, country in enumerate(config.COUNTRY_CONFIG, start=len(config.COUNTRY_CONFIG) + index_data):
                 print(f"{i}. Insert Geographic Data ({country['name']})")
             print("=" * 40)
-            print(f"{7 + len(config.COUNTRY_CONFIG)}. Exit")
+            print(f"{index_data + 2 * len(config.COUNTRY_CONFIG)}. Exit")
 
             choice = input("Input: ").strip()
             print()
@@ -184,21 +161,21 @@ class DataManager:
                     services.manage_proxy.send_signal_newnym()
                 else:
                     print("Change 'USE_PROXY=true' in config.json to use this service!")
-            elif choice == '2a':
+            elif choice == '3':
                 self.create_tables()
-            elif choice == '2b':
+            elif choice == '4':
                 self.drop_all_tables()
-            elif choice == '2c':
+            elif choice == '5':
                 self.run_sql_file()
-            elif choice == '2d':
+            elif choice == '6':
                 data_transform.transform()
-            elif choice in map(str, range(3, 3 + len(config.COUNTRY_CONFIG))):
-                index = int(choice) - 3
+            elif choice in map(str, range(index_data, index_data + len(config.COUNTRY_CONFIG))):
+                index = int(choice) - index_data
                 self.fetch_and_save_data(config.COUNTRY_CONFIG[index])
-            elif choice in map(str, range(7, 7 + len(config.COUNTRY_CONFIG))):
-                index = int(choice) - 7
+            elif choice in map(str, range(len(config.COUNTRY_CONFIG)+index_data, index_data + 2 * len(config.COUNTRY_CONFIG))):
+                index = int(choice) - (len(config.COUNTRY_CONFIG)+index_data)
                 self.load_geographic_data(config.COUNTRY_CONFIG[index])
-            elif choice == str(7 + len(config.COUNTRY_CONFIG)):
+            elif choice == str(index_data + 2 * len(config.COUNTRY_CONFIG)):
                 break
             else:
                 print("Invalid input!")
