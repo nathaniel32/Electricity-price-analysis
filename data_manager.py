@@ -131,51 +131,48 @@ class DataManager:
         print(f"Geographic data for {country['name']} inserted.")
 
     def run(self):
+        menu_items = [
+            ('Check Proxy IP', lambda: services.utils.check_ip()),
+            ('Change Proxy IP', lambda: (services.manage_proxy.send_signal_newnym() if config.USE_PROXY else print("Change 'USE_PROXY=true' in config.json to use this service!"))),
+            ('Create Table', lambda: self.create_tables()),
+            ('Drop All Table', lambda: self.drop_all_tables()),
+            ('Import Data', lambda: self.run_sql_file()),
+            ('Data Transform', lambda: data_transform.transform())
+        ]
+
         self.start_session()
         data_transform = services.data_transform.DataTransform(session=self.session)
-        index_data = 7
+        start_auto_menu = len(menu_items)+1
+
         while True:
             print("\n================= MENU =================")
-            print("1. Check Proxy IP")
-            print("2. Change Proxy IP")
-            print("3. Create Table")
-            print("4. Drop All Table")
-            print("5. Import Data")
-            print("6. Data Transform")
+            for i, (label, _) in enumerate(menu_items):
+                print(f"{i+1}. {label}")
+            
             print("=" * 40)
-            for i, country in enumerate(config.COUNTRY_CONFIG, start=index_data):
+            for i, country in enumerate(config.COUNTRY_CONFIG, start=start_auto_menu):
                 print(f"{i}. Fetch and Save Data ({country['name']})")
+            
             print("=" * 40)
-            for i, country in enumerate(config.COUNTRY_CONFIG, start=len(config.COUNTRY_CONFIG) + index_data):
+            for i, country in enumerate(config.COUNTRY_CONFIG, start=len(config.COUNTRY_CONFIG) + start_auto_menu):
                 print(f"{i}. Insert Geographic Data ({country['name']})")
+            
             print("=" * 40)
-            print(f"{index_data + 2 * len(config.COUNTRY_CONFIG)}. Exit")
+            print(f"{start_auto_menu + 2 * len(config.COUNTRY_CONFIG)}. Exit")
 
             choice = input("Input: ").strip()
             print()
 
-            if choice == '1':
-                services.utils.check_ip()
-            elif choice == '2':
-                if config.USE_PROXY:
-                    services.manage_proxy.send_signal_newnym()
-                else:
-                    print("Change 'USE_PROXY=true' in config.json to use this service!")
-            elif choice == '3':
-                self.create_tables()
-            elif choice == '4':
-                self.drop_all_tables()
-            elif choice == '5':
-                self.run_sql_file()
-            elif choice == '6':
-                data_transform.transform()
-            elif choice in map(str, range(index_data, index_data + len(config.COUNTRY_CONFIG))):
-                index = int(choice) - index_data
+            if int(choice) < start_auto_menu:
+                index = int(choice) - 1
+                menu_items[index][1]()
+            elif choice in map(str, range(start_auto_menu, start_auto_menu + len(config.COUNTRY_CONFIG))):
+                index = int(choice) - start_auto_menu
                 self.fetch_and_save_data(config.COUNTRY_CONFIG[index])
-            elif choice in map(str, range(len(config.COUNTRY_CONFIG)+index_data, index_data + 2 * len(config.COUNTRY_CONFIG))):
-                index = int(choice) - (len(config.COUNTRY_CONFIG)+index_data)
+            elif choice in map(str, range(len(config.COUNTRY_CONFIG)+start_auto_menu, start_auto_menu + 2 * len(config.COUNTRY_CONFIG))):
+                index = int(choice) - (len(config.COUNTRY_CONFIG)+start_auto_menu)
                 self.load_geographic_data(config.COUNTRY_CONFIG[index])
-            elif choice == str(index_data + 2 * len(config.COUNTRY_CONFIG)):
+            elif choice == str(start_auto_menu + 2 * len(config.COUNTRY_CONFIG)):
                 break
             else:
                 print("Invalid input!")
