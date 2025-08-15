@@ -2,7 +2,7 @@ import services.utils
 import services.bot_manager
 import services.csv_manager
 from services.table_manager import TableManager
-from services.utils import config
+from services.utils import config, confirm_action
 from database.connection import Connection
 from services.proxy_manager import ProxyManager
 
@@ -50,13 +50,21 @@ class DataManager:
         
         menu_items = [
             ('Check Proxy IP', lambda: proxy_manager.check_ip()),
-            ('Change Proxy IP', lambda: (proxy_manager.send_signal_newnym() if config.USE_PROXY else print("Change 'USE_PROXY=true' in config.json to use this service!"))),
-            ('Create Table', lambda: table_manager.create_tables()),
-            ('Drop All Table', lambda: table_manager.drop_all_tables()),
+            ('Change Proxy IP', lambda: (
+                proxy_manager.send_signal_newnym()
+                if config.USE_PROXY else print("Change 'USE_PROXY=true' in config.json to use this service!")
+            )),
             ('Import SQL File', lambda: table_manager.import_sql_file()),
-            ('Bot Data Tabular Transform', lambda: table_manager.tabular_transform()),
-            ('Clear Bot Data Session', lambda: table_manager.clear_bot_data_session())
+            ('Create Tables', lambda: table_manager.create_tables()),
+            ('Transform Bot JSON Data to Tabular', lambda: table_manager.tabular_transform()),
+            ('Drop All Tables', lambda: (
+                table_manager.drop_all_tables() if confirm_action("Drop all tables? (y/n): ") else print("Canceled.")
+            )),
+            ('Clear Bot Data Session', lambda: (
+                table_manager.clear_bot_data_session() if confirm_action("Clear bot data session? (y/n): ") else print("Canceled.")
+            ))
         ]
+
         start_auto_menu = len(menu_items)+1
 
         while True:
@@ -66,11 +74,11 @@ class DataManager:
             
             print("=" * 40)
             for i, country in enumerate(config.COUNTRY_CONFIG, start=start_auto_menu):
-                print(f"{i}. Fetch and Save Data ({country['name']})")
+                print(f"{i}. Insert Geographic Data ({country['name']})")
             
             print("=" * 40)
             for i, country in enumerate(config.COUNTRY_CONFIG, start=len(config.COUNTRY_CONFIG) + start_auto_menu):
-                print(f"{i}. Insert Geographic Data ({country['name']})")
+                print(f"{i}. Fetch and Save Data ({country['name']})")
             
             print("=" * 40)
             print(f"{start_auto_menu + 2 * len(config.COUNTRY_CONFIG)}. Exit")
@@ -78,15 +86,15 @@ class DataManager:
             choice = input("Input: ").strip()
             print()
 
-            if int(choice) < start_auto_menu:
+            if choice.isdigit() and int(choice) < start_auto_menu:
                 index = int(choice) - 1
                 menu_items[index][1]()
             elif choice in map(str, range(start_auto_menu, start_auto_menu + len(config.COUNTRY_CONFIG))):
                 index = int(choice) - start_auto_menu
-                self.run_bot(config.COUNTRY_CONFIG[index])
+                self.import_geo(config.COUNTRY_CONFIG[index])
             elif choice in map(str, range(len(config.COUNTRY_CONFIG)+start_auto_menu, start_auto_menu + 2 * len(config.COUNTRY_CONFIG))):
                 index = int(choice) - (len(config.COUNTRY_CONFIG)+start_auto_menu)
-                self.import_geo(config.COUNTRY_CONFIG[index])
+                self.run_bot(config.COUNTRY_CONFIG[index])
             elif choice == str(start_auto_menu + 2 * len(config.COUNTRY_CONFIG)):
                 break
             else:

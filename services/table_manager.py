@@ -3,6 +3,7 @@ import services.utils
 import json
 from sqlalchemy import text
 import sqlparse
+from sqlalchemy.exc import IntegrityError
 
 class TableManager:
     def __init__(self, session, db_connection):
@@ -144,9 +145,10 @@ class TableManager:
             print("Nothing can be done!")
             return
 
-        for area in areas:
+        input_data = 0
+        for index, area in enumerate(areas, start=1):
             try:
-                print(area.pa_id)
+                print(f"{index}/{len(areas)}: New Input Data: {input_data}")
                 
                 t_postal_area = (
                     self.session.query(TPostalArea.pa_id, TPostalArea.pa_data)
@@ -216,9 +218,11 @@ class TableManager:
 
                 self.session.commit()
                 print(f"Successfully processed postal area: {area.pa_code}")
-                
+                input_data += 1
+            except IntegrityError as e:
+                self.session.rollback()
             except Exception as e:
-                print(f"Error processing postal area {area.pa_code}: {str(e)[:100]}")
+                print(f"Error processing postal area {area.pa_code}: {e}")
                 self.session.rollback()
                 continue
 
