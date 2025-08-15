@@ -1,6 +1,6 @@
 import services.utils
 import services.manage_proxy
-import services.data_insert
+import services.bot
 import services.geo_insert
 import services.data_transform
 from services.utils import config
@@ -18,7 +18,7 @@ class DataManager:
             ('Change Proxy IP', lambda: (services.manage_proxy.send_signal_newnym() if config.USE_PROXY else print("Change 'USE_PROXY=true' in config.json to use this service!"))),
             ('Create Table', lambda: self.create_tables()),
             ('Drop All Table', lambda: self.drop_all_tables()),
-            ('Import Data', lambda: self.run_sql_file()),
+            ('Import Data', lambda: self.import_sql()),
             ('Data Transform', lambda: self.tranform_data()),
             ('Clean pa_data', lambda: self.clean_pa_data())
         ]
@@ -36,7 +36,7 @@ class DataManager:
         except Exception as e:
             print(f"Failed to create tables: {e}")
         
-    def run_sql_file(self):
+    def import_sql(self):
         while True:
             filepath = input("File Path (or type 'exit' to quit): ").strip().strip('"').strip("'")
             if filepath.lower() == 'exit':
@@ -119,12 +119,12 @@ class DataManager:
             obj.pa_data = None
             obj.pa_status_code = None """
         try:
-            clean_pa_data = """
+            query = """
                 UPDATE t_postal_area
                 SET pa_status_code = NULL,
                     pa_data = NULL;
             """
-            self.session.execute(text(clean_pa_data))
+            self.session.execute(text(query))
             self.session.commit()
             print("pa_data cleanup complete.")
         except Exception as e:
@@ -132,18 +132,18 @@ class DataManager:
             print(f"Cleanup failed: {e}")
             raise
 
-    def fetch_and_save_data(self, country):
-        importer = services.data_insert.DataImporter(
+    def run_bot(self, country):
+        importer = services.bot.BotManager(
             session=self.session,
             target_url=country["url"],
             target_country=country["name"],
             fetch_min_delay=config.FETCH_MIN_DELAY,
             fetch_max_delay=config.FETCH_MAX_DELAY
         )
-        importer.fetch_and_insert()
+        importer.run_bot()
         print(f"Data for {country['name']} inserted.")
 
-    def load_geographic_data(self, country):
+    def import_geo(self, country):
         importer = services.geo_insert.GeoImporter(
             session=self.session,
             csv_path=country["csv"],
@@ -190,10 +190,10 @@ class DataManager:
                 self.menu_items[index][1]()
             elif choice in map(str, range(start_auto_menu, start_auto_menu + len(config.COUNTRY_CONFIG))):
                 index = int(choice) - start_auto_menu
-                self.fetch_and_save_data(config.COUNTRY_CONFIG[index])
+                self.run_bot(config.COUNTRY_CONFIG[index])
             elif choice in map(str, range(len(config.COUNTRY_CONFIG)+start_auto_menu, start_auto_menu + 2 * len(config.COUNTRY_CONFIG))):
                 index = int(choice) - (len(config.COUNTRY_CONFIG)+start_auto_menu)
-                self.load_geographic_data(config.COUNTRY_CONFIG[index])
+                self.import_geo(config.COUNTRY_CONFIG[index])
             elif choice == str(start_auto_menu + 2 * len(config.COUNTRY_CONFIG)):
                 break
             else:

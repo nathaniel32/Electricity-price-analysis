@@ -5,7 +5,7 @@ import time
 import random
 import json
 
-class DataImporter:
+class BotManager:
     def __init__(self, session, target_url, target_country, fetch_min_delay, fetch_max_delay):
         self.target_url = target_url
         self.target_country = target_country
@@ -14,7 +14,7 @@ class DataImporter:
         self.fetch_max_delay = fetch_max_delay
         self.proxies = config.PROXIES if config.USE_PROXY else None
 
-    def fetch_and_insert(self):
+    def run_bot(self):
         areas = (
             self.session.query(TPostalArea)
             .select_from(TPostalArea)
