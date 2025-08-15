@@ -40,7 +40,7 @@ class DataManager:
                     sql_commands = file.read()
             except FileNotFoundError:
                 print("File not found!")
-                return
+                continue
 
             statements = sqlparse.split(sql_commands)
             success_count = 0
@@ -67,7 +67,7 @@ class DataManager:
                 print("Commit failed. Rolling back.")
                 self.session.rollback()
                 print(str(e)[:500])
-                return
+                continue
 
             print(f"\nDone. {success_count} statements executed successfully. {error_count} failed.\n")
 

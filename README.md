@@ -9,7 +9,7 @@ Create a `config.json` and `.env` files in the root of your project with your da
 
 ```json
 {
-    "USE_PROXY": true,
+    "USE_PROXY": false,
     "PROXIES": {
         "http": "socks5h://127.0.1.0:9050",
         "https": "socks5h://127.0.1.0:9050"
