@@ -38,6 +38,7 @@ queryShortcut: [
     { label: 'Date', query: `SELECT * FROM t_date ORDER BY d_date;` },
     { label: 'Hour', query: `SELECT * FROM t_hour ORDER BY h_hour;` },
     { label: 'Component', query: 'SELECT * FROM t_component;' },
+    { label: 'Count Value', query: `SELECT COUNT(*) FROM t_value;` },
     { label: 'Country, Province, City, Postal', query: `SELECT TOP 100 c_name, p_name, ci_name, pa_name, pa_code, pa_data 
 FROM t_postal_area 
 JOIN t_city ON t_city.ci_id = t_postal_area.ci_id 
