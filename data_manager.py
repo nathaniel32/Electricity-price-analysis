@@ -17,8 +17,9 @@ class DataManager:
     def close_session(self):
         self.db_connection.close_session()
 
-    def run_bot(self, country):
+    def run_bot(self, table_manager, country):
         importer = services.bot_manager.BotManager(
+            table_manager=table_manager,
             session=self.session,
             target_url=country["url"],
             target_country=country["name"],
@@ -94,7 +95,7 @@ class DataManager:
                 self.import_geo(config.COUNTRY_CONFIG[index])
             elif choice in map(str, range(len(config.COUNTRY_CONFIG)+start_auto_menu, start_auto_menu + 2 * len(config.COUNTRY_CONFIG))):
                 index = int(choice) - (len(config.COUNTRY_CONFIG)+start_auto_menu)
-                self.run_bot(config.COUNTRY_CONFIG[index])
+                self.run_bot(table_manager, config.COUNTRY_CONFIG[index])
             elif choice == str(start_auto_menu + 2 * len(config.COUNTRY_CONFIG)):
                 break
             else:

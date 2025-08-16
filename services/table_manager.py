@@ -9,6 +9,9 @@ class TableManager:
     def __init__(self, session, db_connection):
         self.session = session
         self.db_connection = db_connection
+        self.existing_dates = None
+        self.existing_hours = None
+        self.existing_components = None
 
     def create_tables(self):
         try:
@@ -113,28 +116,95 @@ class TableManager:
             print(f"Cleanup failed: {e}")
             raise
 
-    def tabular_transform(self):
-        existing_dates = set()
-        existing_hours = set()
-        existing_components = set()
-
+    def _tabular_transform_init(self):
+        self.existing_dates = set()
+        self.existing_hours = set()
+        self.existing_components = set()
+        
         """Load ID"""
+        # Load dates
         existing_date_ids = self.session.query(TDate.d_id).all()
-        existing_dates = {date_id[0] for date_id in existing_date_ids}
+        self.existing_dates = {date_id[0] for date_id in existing_date_ids}
         
-        # hours
+        # Load hours
         existing_hour_ids = self.session.query(THour.h_id).all()
-        existing_hours = {hour_id[0] for hour_id in existing_hour_ids}
+        self.existing_hours = {hour_id[0] for hour_id in existing_hour_ids}
         
-        # components
+        # Load components
         existing_component_ids = self.session.query(TComponent.co_id).all()
-        existing_components = {comp_id[0] for comp_id in existing_component_ids}
+        self.existing_components = {comp_id[0] for comp_id in existing_component_ids}
         
-        print(f"Cache initialized: {len(existing_dates)} dates, {len(existing_hours)} hours, {len(existing_components)} components")
+        print(f"Cache initialized: {len(self.existing_dates)} dates, {len(self.existing_hours)} hours, {len(self.existing_components)} components")
 
+    def _tabular_transform_tr(self, pa_id, json_data, log=False):
+        try:
+            if "energy" not in json_data:
+                raise ValueError(f"Invalid JSON structure for postal area {pa_id}")
+
+            for date_component_config in services.utils.config.DATE_COMPONENTS_CONFIG:
+                hours_json = json_data["energy"][date_component_config]
+                
+                for hour_json in hours_json:
+                    date = hour_json["date"]
+                    hour = hour_json["hour"]
+
+                    # Generate unique IDs
+                    date_id = services.utils.md5_hash(date)
+                    hour_id = services.utils.md5_hash(str(hour))
+
+                    # Check cache
+                    if date_id not in self.existing_dates:
+                        t_date = TDate(d_id=date_id, d_date=date)
+                        self.session.add(t_date)
+                        self.existing_dates.add(date_id)
+                        self.session.flush()
+
+                    if hour_id not in self.existing_hours:
+                        t_hour = THour(h_id=hour_id, h_hour=hour)
+                        self.session.add(t_hour)
+                        self.existing_hours.add(hour_id)
+                        self.session.flush()
+                    
+                    for price_component in hour_json["priceComponents"]:
+                        for price_component_config in services.utils.config.PRICE_COMPONENTS_CONFIG:
+                            if price_component["type"] in price_component_config["alias"]:
+                                component_id = services.utils.md5_hash(price_component_config["name"])
+                                if component_id not in self.existing_components:
+                                    t_component = TComponent(
+                                        co_id=component_id, 
+                                        co_name=price_component_config["name"]
+                                    )
+                                    self.session.add(t_component)
+                                    self.existing_components.add(component_id)
+                                    self.session.flush()
+
+                                t_value = TValue(
+                                    pa_id=pa_id,
+                                    d_id=date_id,
+                                    h_id=hour_id,
+                                    co_id=component_id, 
+                                    v_value=price_component["priceExcludingVat"]
+                                )
+                                self.session.add(t_value)
+
+            self.session.commit()
+            if log:
+                print(f"Data successfully transformed into tabular: {pa_id}")
+
+        except IntegrityError as e:
+            self.session.rollback()
+            #print(f"Primary key violation for postal area {pa_id}: {e.orig}")
+            raise
+        except Exception as e:
+            self.session.rollback()
+            print(f"Error processing postal area {pa_id}: {str(e)}")
+            raise
+
+    def tabular_transform(self):
+        self._tabular_transform_init()
         
         areas = (
-            self.session.query(TPostalArea.pa_id, TPostalArea.pa_code)
+            self.session.query(TPostalArea.pa_id)
             .filter(TPostalArea.pa_data.isnot(None))
             .all()
         )
@@ -149,82 +219,27 @@ class TableManager:
         for index, area in enumerate(areas, start=1):
             try:
                 t_postal_area = (
-                    self.session.query(TPostalArea.pa_id, TPostalArea.pa_data)
+                    self.session.query(TPostalArea.pa_data)
                     .filter(TPostalArea.pa_id == area.pa_id)
                     .first()
                 )
+
+                if not t_postal_area:
+                    print(f"Postal area {area.pa_id} not found")
+                    continue
                 
                 postal_json_data = json.loads(t_postal_area.pa_data)
+                
+                self._tabular_transform_tr(area.pa_id, postal_json_data)
 
-                if "energy" not in postal_json_data:
-                    print(f"\nInvalid JSON structure for {area.pa_code}")
-                    continue
-
-                for date_component_config in services.utils.config.DATE_COMPONENTS_CONFIG:
-                    hours_json = postal_json_data["energy"][date_component_config]
-                    
-                    for hour_json in hours_json:
-                        date = hour_json["date"]
-                        hour = hour_json["hour"]
-
-                        # Generate unique IDs
-                        date_id = services.utils.md5_hash(date)
-                        hour_id = services.utils.md5_hash(str(hour))
-
-                        # Check cache
-                        if date_id not in existing_dates:
-                            t_date = TDate(d_id=date_id, d_date=date)
-                            self.session.add(t_date)
-                            # Add to cache
-                            existing_dates.add(date_id)
-                            self.session.flush()
-
-                        # Check cache
-                        if hour_id not in existing_hours:
-                            t_hour = THour(h_id=hour_id, h_hour=hour)
-                            self.session.add(t_hour)
-                            # Add to cache
-                            existing_hours.add(hour_id)
-                            self.session.flush()
-                        
-                        for price_component in hour_json["priceComponents"]:
-                            for price_component_config in services.utils.config.PRICE_COMPONENTS_CONFIG:
-                                if price_component["type"] in price_component_config["alias"]:
-                                    #print(price_component_config["name"], " -> ", price_component["priceExcludingVat"])
-                                    
-                                    # Check cache
-                                    component_id = services.utils.md5_hash(price_component_config["name"])
-                                    if component_id not in existing_components:
-                                        t_component = TComponent(
-                                            co_id=component_id, 
-                                            co_name=price_component_config["name"]
-                                        )
-                                        self.session.add(t_component)
-                                        # Add to cache
-                                        existing_components.add(component_id)
-                                        self.session.flush()
-
-                                    # Create TValue record
-                                    t_value = TValue(
-                                        pa_id=t_postal_area.pa_id,
-                                        d_id=date_id,
-                                        h_id=hour_id,
-                                        co_id=component_id, 
-                                        v_value=price_component["priceExcludingVat"]
-                                    )
-                                    self.session.add(t_value)
-
-                self.session.commit()
-                #print(f"\nSuccessfully processed postal area: {area.pa_code}")
                 input_data += 1
             except IntegrityError as e:
-                self.session.rollback()
+                pass
             except Exception as e:
-                print(f"\nError processing postal area {area.pa_code}: {e}")
-                self.session.rollback()
+                print(f"\nError processing postal area {area.pa_id}: {e}")
                 continue
 
             if index % 10 == 0 or index == len(areas):
-                print(f"\r{index}/{len(areas)} | New Tabular Data: {input_data}", end='', flush=True)
+                print(f"\r{index}/{len(areas)} | New Tabular Data: {input_data} ", end='', flush=True)
 
         print("\nData transformation completed!")

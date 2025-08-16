@@ -1,12 +1,15 @@
-from services.utils import config
+from services.utils import config, confirm_action
 from database.models import TCountry, TProvince, TCity, TPostalArea
 import requests
 import time
 import random
 import json
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import or_
 
 class BotManager:
-    def __init__(self, session, target_url, target_country, fetch_min_delay, fetch_max_delay):
+    def __init__(self, table_manager, session, target_url, target_country, fetch_min_delay, fetch_max_delay):
+        self.table_manager = table_manager
         self.target_url = target_url
         self.target_country = target_country
         self.session = session
@@ -15,6 +18,12 @@ class BotManager:
         self.proxies = config.PROXIES if config.USE_PROXY else None
 
     def run_bot(self):
+        save_pa_data = confirm_action(message="Save JSON Data (y/n): ")
+        transform_to_tabular = confirm_action(message="Transform to Tabular (y/n): ") if save_pa_data else True
+
+        if transform_to_tabular:
+            self.table_manager._tabular_transform_init()
+
         areas = (
             self.session.query(TPostalArea)
             .select_from(TPostalArea)
@@ -22,7 +31,11 @@ class BotManager:
             .join(TProvince, TProvince.p_id == TCity.p_id)
             .join(TCountry, TCountry.c_id == TProvince.c_id)
             .filter(
-                TPostalArea.pa_data.is_(None),
+                #TPostalArea.pa_data.is_(None),
+                or_(
+                    TPostalArea.pa_status_code != 200,
+                    TPostalArea.pa_status_code.is_(None)
+                ),
                 TCountry.c_name == self.target_country
             )
             .all()
@@ -44,18 +57,28 @@ class BotManager:
                     
                     response.raise_for_status()
 
-                    area.pa_data = json.dumps(response.json())
+                    if save_pa_data:
+                        print("Saving JSON..")
+                        area.pa_data = json.dumps(response.json())
+
+                    if transform_to_tabular:
+                        print("Transforming JSON..")
+                        self.table_manager._tabular_transform_tr(pa_id=area.pa_id, json_data=response.json(), log=True)
 
                     print("PLZ:", pa_code, "\nData: ", str(area.pa_data)[0:200]+"...")
                     self.session.commit()
+                
+                except IntegrityError as e:
+                    # commit status code
+                    self.session.commit()
                 except requests.RequestException as e:
                     print("\nStatus Code:", area.pa_status_code)
-                    print(f"Failed to fetch data for {pa_code}: {e}")
-                except ValueError:
-                    print("\nStatus Code:", area.pa_status_code)
-                    print(f"The response from the API is not valid JSON for {pa_code}")
+                    # commit status code
+                    self.session.commit()
+                except Exception as e:
+                    self.session.rollback()
+                    print(f"\nError: {e}")
 
-                self.session.commit()
                 time.sleep(random.uniform(self.fetch_min_delay, self.fetch_max_delay))
             else:
                 print(pa_code, "NO DATA!")
