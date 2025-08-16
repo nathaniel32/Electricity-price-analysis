@@ -72,12 +72,12 @@ class BotManager:
                     # commit status code
                     self.session.commit()
                 except requests.RequestException as e:
-                    print("\nStatus Code:", area.pa_status_code)
+                    print("Status Code:", area.pa_status_code)
                     # commit status code
                     self.session.commit()
                 except Exception as e:
                     self.session.rollback()
-                    print(f"\nError: {e}")
+                    print(f"Error: {e}")
 
                 time.sleep(random.uniform(self.fetch_min_delay, self.fetch_max_delay))
             else:
