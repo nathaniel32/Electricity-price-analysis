@@ -100,8 +100,9 @@ Create a `config.json` and `.env` files in the root of your project with your da
 ```
 
 ```
+COMPOSE_PROJECT_NAME=strompreisanalyse
 DB_USERNAME=sa
-DB_PASSWORD=XXXXXX
+DB_PASSWORD=XXXXXXXXXXXXXXXXXXX
 DB_DATABASE=strom_db
 DB_HOSTNAME=localhost
 DB_PORT=1433
