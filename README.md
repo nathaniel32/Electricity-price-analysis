@@ -74,7 +74,7 @@ Create a `config.json` and `.env` files in the root of your project with your da
         }
     ],
     "DATE_COMPONENTS_CONFIG": [
-        "yesterdayHours", "todayHours"
+        "yesterdayHours", "todayHours", "tomorrowHours"
     ],
     "PRICE_COMPONENTS_CONFIG": [
         {
